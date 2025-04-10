@@ -42,7 +42,7 @@ router.post('/register', async (req, res) => {
                 {
                     nume_utilizator,
                     parola_hash,
-                    rol: rol || 'Angajat', // Default role if not specified
+                    rol: rol || 'Normal', // Default role if not specified
                     data_creare: new Date()
                 }
             ])
