@@ -3,7 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const { createClient } = require('@supabase/supabase-js');
- 
+const registerRoutes = require('./routes/register.routes');
+
 
 // Load environment variables
 dotenv.config();
@@ -27,13 +28,15 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // Example route to test database connection
 app.get('/test', async (req, res) => {
   try {
-    const { data, error } = await supabase.from('your_table_name').select('*');
+    const { data, error } = await supabase.from('utilizatori').select('*');
     if (error) throw error;
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.use('/api', registerRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
