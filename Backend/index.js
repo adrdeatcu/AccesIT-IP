@@ -1,13 +1,9 @@
 // Import required modules
+require('dotenv').config(); // Ensure this is at the top
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const { createClient } = require('@supabase/supabase-js');
 const registerRoutes = require('./routes/register.routes');
-
-
-// Load environment variables
-dotenv.config();
 
 // Initialize Express app
 const app = express();
@@ -17,6 +13,9 @@ app.use(express.json());
 // Supabase connection
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
+
+console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
+console.log('SUPABASE_KEY:', process.env.SUPABASE_KEY);
 
 if (!supabaseUrl || !supabaseKey) {
   console.error('Missing Supabase URL or Key in environment variables.');
