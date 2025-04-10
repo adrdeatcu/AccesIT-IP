@@ -23,26 +23,24 @@ router.post('/register', async (req, res) => {
             .single();
 
         if (findError && findError.code !== 'PGRST116') {
-            // Handle unexpected errors
             throw findError;
         }
 
         if (existingUser) {
-            return res.status(409).json({ error: 'Acest nume de utilizator există deja' });
+            return res.status(400).json({ error: 'Numele de utilizator există deja' });
         }
 
-        // Hash the password
-        const saltRounds = 10;
-        const parola_hash = await bcrypt.hash(parola, saltRounds);
+        // Hash password
+        const parola_hash = await bcrypt.hash(parola, 10);
 
-        // Insert new user into the database
+        // Insert new user
         const { data: newUser, error: insertError } = await supabase
             .from('utilizatori')
             .insert([
                 {
                     nume_utilizator,
                     parola_hash,
-                    rol: rol || 'Normal', // Default role if not specified
+                    rol: rol || 'Normal',
                     data_creare: new Date()
                 }
             ])
@@ -53,7 +51,6 @@ router.post('/register', async (req, res) => {
             throw insertError;
         }
 
-        // Respond with the newly created user (excluding the password hash)
         res.status(201).json({
             message: 'Utilizator înregistrat cu succes',
             user: {
