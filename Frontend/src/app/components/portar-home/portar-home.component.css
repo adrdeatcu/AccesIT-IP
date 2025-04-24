@@ -1,0 +1,211 @@
+.barrier-box {
+    height: 350px;
+    position: relative;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    overflow: hidden;
+}
+
+.barrier-box::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(0, 0, 0, 0.1)
+    );
+}
+
+.barrier-animation {
+    height: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.barrier-arm {
+    width: 20px;
+    height: 160px;
+    background-color: #333;
+    transform-origin: bottom center;
+    transition: transform 3s linear;
+    position: absolute;
+    bottom: 20px; /* Lower value to move the barrier down */
+}
+
+.closed .barrier-arm {
+    transform: rotate(90deg); /* Horizontal position */
+}
+
+.opening .barrier-arm {
+    transform: rotate(0deg); /* Vertical position */
+}
+
+.opened .barrier-arm {
+    transform: rotate(0deg); /* Vertical position */
+}
+
+.closing .barrier-arm {
+    transform: rotate(90deg); /* Horizontal position */
+}
+
+.barrier-base {
+    width: 602px;
+    height: 100px;
+    background-color: #0c0101;
+    position: absolute;
+    bottom: 0px; /* Increase this value */
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 0px;
+}
+
+.guard-post {
+    position: absolute;
+    left: 170px;
+    bottom: 100px;
+    width: 120px;  /* Increased from 80px */
+    height: 180px; /* Increased from 120px */
+    background-color: #555;
+    border: 3px solid #333; /* Increased from 2px */
+    border-radius: 2px; /* Increased from 5px */
+    z-index: 2;
+}
+
+.guard-window {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75px;
+    height: 60px;
+    background-color: #2196F3;
+    border: 4px solid #1976D2;
+    border-radius: 5px;
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
+    overflow: hidden; /* Add this to contain the guard figure */
+}
+
+.guard-figure {
+    position: absolute;
+    bottom: 0px;   /* Changed from 5px to move figure lower */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 27px;   
+    height: 36px;  
+    background-color: rgba(0, 0, 0, 0.949);
+    border-radius: 13px 13px 0 0;
+}
+
+.guard-head {
+    position: absolute;
+    top: -10px;    /* Adjusted for new proportions */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;   /* Reduced by 10% from 20px */
+    height: 18px;  /* Reduced by 10% from 20px */
+    background-color: rgba(0, 0, 0, 0.962);
+    border-radius: 50%;
+}
+
+.guard-arm-left {
+    position: absolute;
+    top: 12px;
+    left: -12px;   /* Adjusted to accommodate longer arm */
+    width: 24px;   /* Increased from 12px */
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.949);
+    transform: rotate(120deg);
+    border-radius: 2px;
+}
+
+.guard-arm-right {
+    position: absolute;
+    top: 12px;
+    right: -12px;  /* Adjusted to accommodate longer arm */
+    width: 24px;   /* Increased from 12px */
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.949);
+    transform: rotate(-120deg);
+    border-radius: 2px;
+}
+
+.barrier-post-left {
+    position: absolute;
+    left: 50%;
+    bottom: 100px;
+    width: 40px;
+    height: 90px;
+    background-color: #444;
+    border: 2px solid #333;
+    transform: translateX(-50%);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.barrier-post-right {
+    position: absolute;
+    right: 100px;  /* Adjust this value to position the right post */
+    bottom: 100px;
+    width: 45px;
+    height: 180px;
+    background-color: #444;
+    border: 2px solid #333;
+    border-radius: 0px;
+    z-index: 1;
+}
+
+.mesh-fence {
+    position: absolute;
+    right: 0px; 
+    bottom: 100px;
+    width: 100px;  /* Width of the fence section */
+    height: 180px; /* Same height as the right post */
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 5px,
+        #c6b8b8 5px,
+        #0e2c09 7px
+    ),
+    repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 5px,
+        #666 5px,
+        #666 7px
+    );
+    border: 2px solid #444;
+    z-index: 1;
+}
+
+.mesh-fence-left {
+    position: absolute;
+    left: 0px;
+    bottom: 100px;
+    width: 170px;  /* Width to reach the guard post */
+    height: 180px; /* Same height as other elements */
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 5px,
+        #c6b8b8 5px,
+        #0e2c09 7px
+    ),
+    repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 5px,
+        #666 5px,
+        #666 7px
+    );
+    border: 2px solid #444;
+    z-index: 1;
+}
