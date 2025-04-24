@@ -1,0 +1,54 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Login</h3>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+                        <div class="mb-3">
+                            <label for="numeUtilizator" class="form-label">Nume Utilizator</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="numeUtilizator" 
+                                   [(ngModel)]="loginData.nume_utilizator" 
+                                   name="numeUtilizator" 
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="parola" class="form-label">Parola</label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="parola" 
+                                   [(ngModel)]="loginData.parola" 
+                                   name="parola" 
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rol" class="form-label">Rol</label>
+                            <select class="form-select" 
+                                    id="rol" 
+                                    [(ngModel)]="loginData.rol" 
+                                    name="rol" 
+                                    #rol="ngModel"
+                                    required>
+                                <option value="">Selecteaza rol</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Portar">Portar</option>
+                                <option value="Admin">Admin</option>
+                                <option value="HR">HR</option>
+                            </select>
+                            <div class="text-danger" *ngIf="rol.invalid && (rol.dirty || rol.touched)">
+                                Selectarea unui rol este obligatorie
+                            </div>
+                        </div>
+                        <button type="submit" 
+                                class="btn btn-primary w-100"
+                                [disabled]="!loginForm.form.valid">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="container mt-4">
+    <h2 class="mb-4">Gestionare Utilizatori</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nume Utilizator</th>
+                    <th>Rol</th>
+                    <th>Data Creare</th>
+                    <th>Acțiuni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of utilizatori">
+                    <td>{{user.id_utilizator}}</td>
+                    <td>{{user.nume_utilizator}}</td>
+                    <td>{{user.rol}}</td>
+                    <td>{{user.data_creare | date:'dd/MM/yyyy HH:mm'}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2">
+                            <i class="bi bi-pencil"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id_utilizator)">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
