@@ -11,6 +11,8 @@ dist/
 *.njsproj
 *.sln
 
+
+.jar
 # OS
 Thumbs.db
 Desktop.ini
