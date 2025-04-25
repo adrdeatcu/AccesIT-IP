@@ -14,8 +14,6 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-// Add this after your app initialization
-app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 // Add after app initialization, before routes
 app.use((req, res, next) => {
@@ -77,6 +75,8 @@ app.use('/api', registerRoutes);
 app.use('/api', loginRoutes);
 const utilizatoriRouter = require('./routes/utilizatori.routes');
 app.use('/api', utilizatoriRouter);
+const loguriRoutes = require('./routes/loguri.routes');
+app.use('/api', loguriRoutes);
 
 // Create HTTP server after all routes are defined
 const server = http.createServer(app);

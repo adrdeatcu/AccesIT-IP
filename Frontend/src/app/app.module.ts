@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
 import { HomeComponent } from './components/home/home.component';
@@ -14,6 +16,7 @@ import { PortarHomeComponent } from './components/portar-home/portar-home.compon
 import { RoleGuard } from './guards/role.guard';
 import { AdminUtilizatoriComponent } from './components/admin-utilizatori/admin-utilizatori.component';
 import { AdminCreareUtilizatorComponent } from './components/admin-creare-utilizator/admin-creare-utilizator.component';
+import { PortarLoguriComponent } from './components/portar-loguri/portar-loguri.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -55,7 +58,12 @@ const routes: Routes = [
     canActivate: [RoleGuard],
     data: { role: 'Admin' }
   },
-  // Make sure this route is BEFORE any wildcard routes
+  {
+    path: 'portar/loguri',
+    component: PortarLoguriComponent,
+    canActivate: [RoleGuard],
+    data: { role: 'Portar' }
+  }
 ];
 
 @NgModule({
@@ -69,15 +77,18 @@ const routes: Routes = [
     HrHomeComponent,
     PortarHomeComponent,
     AdminUtilizatoriComponent,
-    AdminCreareUtilizatorComponent
+    AdminCreareUtilizatorComponent,
+    PortarLoguriComponent
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
     FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [RouterModule]
 })
 export class AppModule { }

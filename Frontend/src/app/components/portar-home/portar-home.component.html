@@ -31,16 +31,24 @@
                 </div>
             </div>
             
-            <button 
-                class="btn btn-lg" 
-                [ngClass]="{
-                    'btn-success': barrierState === 'closed',
-                    'btn-danger': barrierState === 'opened'
-                }"
-                (click)="toggleBarrier()" 
-                [disabled]="buttonDisabled">
-                {{ barrierState === 'closed' ? 'Deschide Bariera' : 'Închide Bariera' }}
-            </button>
+            <div class="d-flex justify-content-center gap-3">
+                <button 
+                    class="btn btn-lg" 
+                    [ngClass]="{
+                        'btn-success': barrierState === 'closed',
+                        'btn-danger': barrierState === 'opened'
+                    }"
+                    (click)="toggleBarrier()" 
+                    [disabled]="buttonDisabled">
+                    {{ barrierState === 'closed' ? 'Deschide Bariera' : 'Închide Bariera' }}
+                </button>
+                
+                <button 
+                    class="btn btn-lg btn-info text-white"
+                    routerLink="/portar/loguri">
+                    Vezi Loguri <i class="bi bi-clock-history"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
