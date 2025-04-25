@@ -1,1 +1,46 @@
-<p>portar-home works!</p>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="barrier-container mb-4">
+                <h2 class="mb-3">{{ currentTime }}</h2>
+                <div class="barrier-status alert" [ngClass]="{
+                    'alert-danger': barrierState === 'closed',
+                    'alert-warning': barrierState === 'opening' || barrierState === 'closing',
+                    'alert-success': barrierState === 'opened'
+                }">
+                    <h3>Stare Barieră: {{ barrierState | titlecase }}</h3>
+                    <div class="barrier-box">
+                        <div class="mesh-fence-left"></div>
+                        <div class="guard-post">
+                            <div class="guard-window">
+                                <div class="guard-figure">
+                                    <div class="guard-head"></div>
+                                    <div class="guard-arm-left"></div>
+                                    <div class="guard-arm-right"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="barrier-post-left"></div>
+                        <div class="barrier-post-right"></div>
+                        <div class="mesh-fence"></div>
+                        <div class="barrier-animation" [ngClass]="barrierState">
+                            <div class="barrier-arm"></div>
+                        </div>
+                        <div class="barrier-base"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button 
+                class="btn btn-lg" 
+                [ngClass]="{
+                    'btn-success': barrierState === 'closed',
+                    'btn-danger': barrierState === 'opened'
+                }"
+                (click)="toggleBarrier()" 
+                [disabled]="buttonDisabled">
+                {{ barrierState === 'closed' ? 'Deschide Bariera' : 'Închide Bariera' }}
+            </button>
+        </div>
+    </div>
+</div>
