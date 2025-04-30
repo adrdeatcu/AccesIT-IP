@@ -79,6 +79,10 @@ const loguriRoutes = require('./routes/loguri.routes');
 app.use('/api', loguriRoutes);
 const normalLoguriRoutes = require('./routes/normal-loguri.routes');
 app.use('/api', normalLoguriRoutes);
+const diviziiRoutes = require('./routes/divizii.routes');
+app.use('/api', diviziiRoutes);
+const angajatiRoutes = require('./routes/angajati.routes');
+app.use('/api', angajatiRoutes);
 
 // Create HTTP server after all routes are defined
 const server = http.createServer(app);

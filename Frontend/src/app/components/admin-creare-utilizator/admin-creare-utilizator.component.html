@@ -1,4 +1,3 @@
-
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -8,6 +7,7 @@
                 </div>
                 <div class="card-body">
                     <form (ngSubmit)="onSubmit()" #createForm="ngForm">
+                        <!-- User Account Fields -->
                         <div class="mb-3">
                             <label for="numeUtilizator" class="form-label">Nume Utilizator</label>
                             <input type="text" 
@@ -17,6 +17,7 @@
                                    name="numeUtilizator" 
                                    required>
                         </div>
+
                         <div class="mb-3">
                             <label for="parola" class="form-label">Parola</label>
                             <input type="password" 
@@ -26,13 +27,13 @@
                                    name="parola" 
                                    required>
                         </div>
+
                         <div class="mb-3">
                             <label for="rol" class="form-label">Rol</label>
                             <select class="form-select" 
                                     id="rol" 
                                     [(ngModel)]="userData.rol" 
                                     name="rol" 
-                                    #rol="ngModel"
                                     required>
                                 <option value="">Selecteaza rol</option>
                                 <option value="Normal">Normal</option>
@@ -40,13 +41,139 @@
                                 <option value="Admin">Admin</option>
                                 <option value="HR">HR</option>
                             </select>
-                            <div class="text-danger" *ngIf="rol.invalid && (rol.dirty || rol.touched)">
-                                Selectarea unui rol este obligatorie
+                        </div>
+
+                        <hr>
+                        <h4 class="mb-3">Informații Angajat</h4>
+
+                        <!-- New Employee Fields -->
+                        <div class="mb-3">
+                            <label for="prenume" class="form-label">Prenume</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="prenume" 
+                                   [(ngModel)]="userData.angajat.prenume" 
+                                   name="prenume" 
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nume" class="form-label">Nume</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="nume" 
+                                   [(ngModel)]="userData.angajat.nume" 
+                                   name="nume" 
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cnp" class="form-label">CNP</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="cnp" 
+                                   [(ngModel)]="userData.angajat.cnp" 
+                                   name="cnp" 
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="poza" class="form-label">URL Poză</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="poza" 
+                                   [(ngModel)]="userData.angajat.poza" 
+                                   name="poza">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nrLegitimatie" class="form-label">Nr. Legitimație</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="nrLegitimatie" 
+                                   [(ngModel)]="userData.angajat.nr_legitimatie" 
+                                   name="nrLegitimatie" 
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="divizie" class="form-label">Divizie</label>
+                            <select class="form-select" 
+                                    id="divizie" 
+                                    [(ngModel)]="userData.angajat.id_divizie" 
+                                    name="divizie" 
+                                    required>
+                                <option [ngValue]="null">Selectează divizie</option>
+                                <option *ngFor="let divizie of divizii" [value]="divizie.id_divizie">
+                                    {{divizie.nume_divizie}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="codBluetooth" class="form-label">Cod Bluetooth</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="codBluetooth" 
+                                   [(ngModel)]="userData.angajat.cod_bluetooth" 
+                                   name="codBluetooth">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="identificatorSmartphone" class="form-label">Identificator Smartphone</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="identificatorSmartphone" 
+                                   [(ngModel)]="userData.angajat.identificator_smartphone" 
+                                   name="identificatorSmartphone">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nrMasina" class="form-label">Nr. Mașină</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="nrMasina" 
+                                   [(ngModel)]="userData.angajat.nr_masina" 
+                                   name="nrMasina">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cnpAcordatDe" class="form-label">CNP Acordat De</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="cnpAcordatDe" 
+                                   [(ngModel)]="userData.angajat.cnp_acordat_de" 
+                                   name="cnpAcordatDe" 
+                                   maxlength="13">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="badgeAcordatDe" class="form-label">Badge Acordat De</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="badgeAcordatDe" 
+                                   [(ngModel)]="userData.angajat.badge_acordat_de" 
+                                   name="badgeAcordatDe">
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="accesActiv" 
+                                       [(ngModel)]="userData.angajat.acces_activ" 
+                                       name="accesActiv">
+                                <label class="form-check-label" for="accesActiv">
+                                    Acces Activ
+                                </label>
                             </div>
                         </div>
+
                         <button type="submit" 
-                                class="btn btn-primary w-100"
-                                [disabled]="!createForm.form.valid">Creare Utilizator</button>
+                                class="btn btn-primary w-100" 
+                                [disabled]="!createForm.form.valid">
+                            Creare Utilizator și Angajat
+                        </button>
                     </form>
                 </div>
             </div>

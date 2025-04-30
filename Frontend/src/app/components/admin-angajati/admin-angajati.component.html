@@ -1,0 +1,48 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <h2 class="mb-4">Gestionare Angajați</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nume</th>
+                            <th>Prenume</th>
+                            <th>CNP</th>
+                            <th>Nr. Legitimație</th>
+                            <th>Divizie</th>
+                            <th>Acces Activ</th>
+                            <th>Data Acordării</th>
+                            <th>Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let angajat of angajati">
+                            <td>{{ angajat.id_utilizator }}</td>
+                            <td>{{ angajat.nume }}</td>
+                            <td>{{ angajat.prenume }}</td>
+                            <td>{{ angajat.cnp }}</td>
+                            <td>{{ angajat.nr_legitimatie }}</td>
+                            <td>{{ angajat.id_divizie }}</td>
+                            <td>
+                                <span [class]="angajat.acces_activ ? 'badge bg-success' : 'badge bg-danger'">
+                                    {{ angajat.acces_activ ? 'Activ' : 'Inactiv' }}
+                                </span>
+                            </td>
+                            <td>{{ angajat.data_acordarii | date:'dd/MM/yyyy HH:mm' }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary me-2">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

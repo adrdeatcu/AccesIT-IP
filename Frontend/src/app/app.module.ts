@@ -18,6 +18,7 @@ import { AdminUtilizatoriComponent } from './components/admin-utilizatori/admin-
 import { AdminCreareUtilizatorComponent } from './components/admin-creare-utilizator/admin-creare-utilizator.component';
 import { PortarLoguriComponent } from './components/portar-loguri/portar-loguri.component';
 import { NormalLoguriComponent } from './components/normal-loguri/normal-loguri.component';
+import { AdminAngajatiComponent } from './components/admin-angajati/admin-angajati.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -70,6 +71,12 @@ const routes: Routes = [
   component: NormalLoguriComponent,
   canActivate: [RoleGuard],
   data: { role: 'Normal' }
+  },
+  {
+    path: 'admin/angajati',
+    component: AdminAngajatiComponent,
+    canActivate: [RoleGuard],
+    data: { role: 'Admin' }
   }
 ];
 
@@ -86,7 +93,8 @@ const routes: Routes = [
     AdminUtilizatoriComponent,
     AdminCreareUtilizatorComponent,
     PortarLoguriComponent,
-    NormalLoguriComponent
+    NormalLoguriComponent,
+    AdminAngajatiComponent
   ],
   imports: [
     BrowserModule,
