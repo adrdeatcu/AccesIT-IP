@@ -1,0 +1,33 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <h2 class="mb-4">Istoricul Tău de Prezență</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Data și Ora</th>
+                            <th>Tip Acțiune</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let log of loguri">
+                            <td>{{ log.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                            <td>
+                                <span [ngClass]="{
+                                    'badge bg-success': log.tip_actiune === 'IN',
+                                    'badge bg-danger': log.tip_actiune === 'OUT'
+                                }">
+                                    {{ log.tip_actiune }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-secondary mt-3" routerLink="/normal-home">
+                <i class="bi bi-arrow-left"></i> Înapoi
+            </button>
+        </div>
+    </div>
+</div>
