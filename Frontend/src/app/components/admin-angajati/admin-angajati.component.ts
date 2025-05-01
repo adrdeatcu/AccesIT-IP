@@ -27,6 +27,9 @@ interface Angajat {
 })
 export class AdminAngajatiComponent implements OnInit {
   angajati: Angajat[] = [];
+  currentSortColumn: string = 'id_utilizator';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  selectedDate: string = '';
 
   constructor(private http: HttpClient) {}
 
@@ -35,7 +38,13 @@ export class AdminAngajatiComponent implements OnInit {
   }
 
   private loadAngajati() {
-    this.http.get<Angajat[]>('http://localhost:3000/api/angajati')
+    let url = `http://localhost:3000/api/angajati?sortBy=${this.currentSortColumn}&sortOrder=${this.sortDirection}`;
+    
+    if (this.selectedDate) {
+      url += `&filterDate=${this.selectedDate}`;
+    }
+
+    this.http.get<Angajat[]>(url)
       .subscribe({
         next: (data) => {
           this.angajati = data;
@@ -44,5 +53,30 @@ export class AdminAngajatiComponent implements OnInit {
           console.error('Error loading employees:', error);
         }
       });
+  }
+
+  toggleSort(column: string) {
+    if (this.currentSortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.currentSortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.loadAngajati();
+  }
+
+  getSortIcon(column: string): string {
+    if (this.currentSortColumn !== column) return 'bi-sort';
+    return this.sortDirection === 'asc' ? 'bi-sort-down' : 'bi-sort-up';
+  }
+
+  onDateSelect(event: any) {
+    this.selectedDate = event.target.value;
+    this.loadAngajati();
+  }
+
+  clearDateFilter() {
+    this.selectedDate = '';
+    this.loadAngajati();
   }
 }

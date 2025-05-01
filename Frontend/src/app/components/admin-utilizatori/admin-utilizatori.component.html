@@ -1,13 +1,42 @@
 <div class="container mt-4">
     <h2 class="mb-4">Gestionare Utilizatori</h2>
+
+    <!-- Add date filter -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="input-group">
+                <input 
+                    type="date" 
+                    class="form-control" 
+                    [value]="selectedDate"
+                    (change)="onDateSelect($event)"
+                    placeholder="Filtrează după dată">
+                <button 
+                    class="btn btn-outline-secondary" 
+                    type="button"
+                    (click)="clearDateFilter()">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Nume Utilizator</th>
-                    <th>Rol</th>
-                    <th>Data Creare</th>
+                    <th style="cursor: pointer" (click)="toggleSort('id_utilizator')">
+                        ID <i class="bi" [ngClass]="getSortIcon('id_utilizator')"></i>
+                    </th>
+                    <th style="cursor: pointer" (click)="toggleSort('nume_utilizator')">
+                        Nume Utilizator <i class="bi" [ngClass]="getSortIcon('nume_utilizator')"></i>
+                    </th>
+                    <th style="cursor: pointer" (click)="toggleSort('rol')">
+                        Rol <i class="bi" [ngClass]="getSortIcon('rol')"></i>
+                    </th>
+                    <th style="cursor: pointer" (click)="toggleSort('data_creare')">
+                        Data Creare <i class="bi" [ngClass]="getSortIcon('data_creare')"></i>
+                    </th>
                     <th>Acțiuni</th>
                 </tr>
             </thead>

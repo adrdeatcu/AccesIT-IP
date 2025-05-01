@@ -11,21 +11,69 @@
             </div>
 
             <h2 class="mb-4">Loguri de Prezență</h2>
+
+            <!-- Add filters -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input 
+                            type="date" 
+                            class="form-control" 
+                            [value]="selectedDate"
+                            (change)="onDateSelect($event)"
+                            placeholder="Filtrează după dată">
+                        <select 
+                            class="form-select" 
+                            [value]="selectedAction"
+                            (change)="onActionSelect($event)">
+                            <option value="">Toate acțiunile</option>
+                            <option value="IN">Intrare</option>
+                            <option value="OUT">Ieșire</option>
+                        </select>
+                        <button 
+                            class="btn btn-outline-secondary" 
+                            type="button"
+                            (click)="clearFilters()">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nume Utilizator</th>
-                            <th>Tip Acțiune</th>
-                            <th>Data și Ora</th>
+                            <th style="cursor: pointer" (click)="toggleSort('id_log')">
+                                ID Log <i class="bi" [ngClass]="getSortIcon('id_log')"></i>
+                            </th>
+                            <th style="cursor: pointer" (click)="toggleSort('id_utilizator')">
+                                ID Utilizator <i class="bi" [ngClass]="getSortIcon('id_utilizator')"></i>
+                            </th>
+                            <th style="cursor: pointer" (click)="toggleSort('nume_utilizator')">
+                                Nume Utilizator <i class="bi" [ngClass]="getSortIcon('nume_utilizator')"></i>
+                            </th>
+                            <th style="cursor: pointer" (click)="toggleSort('tip_log')">
+                                Tip Acțiune <i class="bi" [ngClass]="getSortIcon('tip_log')"></i>
+                            </th>
+                            <th style="cursor: pointer" (click)="toggleSort('data_log')">
+                                Data și Ora <i class="bi" [ngClass]="getSortIcon('data_log')"></i>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let log of loguri">
                             <td>{{ log.id }}</td>
+                            <td>{{ log.id_utilizator }}</td>
                             <td>{{ log.nume_utilizator }}</td>
-                            <td>{{ log.tip_actiune }}</td>
+                            <td>
+                                <span [ngClass]="{
+                                    'badge bg-success': log.tip_actiune === 'IN',
+                                    'badge bg-danger': log.tip_actiune === 'OUT'
+                                }">
+                                    {{ log.tip_actiune }}
+                                </span>
+                            </td>
                             <td>{{ log.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                         </tr>
                     </tbody>

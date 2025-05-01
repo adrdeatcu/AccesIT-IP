@@ -1,0 +1,49 @@
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Adăugare Log Manual</h3>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="onSubmit()" #logForm="ngForm">
+                        <div class="mb-3">
+                            <label for="idUtilizator" class="form-label">ID Utilizator</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="idUtilizator" 
+                                   [(ngModel)]="logData.id_utilizator" 
+                                   name="idUtilizator" 
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-grid">
+                                <button type="button" 
+                                        class="btn" 
+                                        [ngClass]="{'btn-success': logData.tip_log === 'IN', 'btn-danger': logData.tip_log === 'OUT'}"
+                                        (click)="toggleTipLog()">
+                                    <i class="bi" [ngClass]="{'bi-box-arrow-in-right': logData.tip_log === 'IN', 'bi-box-arrow-right': logData.tip_log === 'OUT'}"></i>
+                                    {{ logData.tip_log === 'IN' ? 'Intrare' : 'Ieșire' }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" 
+                                    class="btn btn-primary"
+                                    [disabled]="!logForm.form.valid">
+                                <i class="bi bi-plus-circle"></i> Adaugă Log
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-secondary"
+                                    routerLink="/portar/loguri">
+                                <i class="bi bi-arrow-left"></i> Înapoi la Loguri
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

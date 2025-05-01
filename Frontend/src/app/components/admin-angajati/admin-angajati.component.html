@@ -2,18 +2,51 @@
     <div class="row">
         <div class="col">
             <h2 class="mb-4">Gestionare Angajați</h2>
+            
+            <!-- Add date filter -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input 
+                            type="date" 
+                            class="form-control" 
+                            [value]="selectedDate"
+                            (change)="onDateSelect($event)"
+                            placeholder="Filtrează după dată">
+                        <button 
+                            class="btn btn-outline-secondary" 
+                            type="button"
+                            (click)="clearDateFilter()">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nume</th>
-                            <th>Prenume</th>
+                            <th style="cursor: pointer" (click)="toggleSort('id_utilizator')">
+                                ID 
+                                <i class="bi" [ngClass]="getSortIcon('id_utilizator')"></i>
+                            </th>
+                            <th style="cursor: pointer" (click)="toggleSort('nume')">
+                                Nume
+                                <i class="bi" [ngClass]="getSortIcon('nume')"></i>
+                            </th>
+                            <th style="cursor: pointer" (click)="toggleSort('prenume')">
+                                Prenume
+                                <i class="bi" [ngClass]="getSortIcon('prenume')"></i>
+                            </th>
                             <th>CNP</th>
                             <th>Nr. Legitimație</th>
                             <th>Divizie</th>
                             <th>Acces Activ</th>
-                            <th>Data Acordării</th>
+                            <th style="cursor: pointer" (click)="toggleSort('data_acordarii')">
+                                Data Acordării
+                                <i class="bi" [ngClass]="getSortIcon('data_acordarii')"></i>
+                            </th>
                             <th>Acțiuni</th>
                         </tr>
                     </thead>

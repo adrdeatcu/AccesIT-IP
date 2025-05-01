@@ -10,8 +10,17 @@ const supabase = createClient(
 
 router.get('/loguri-prezenta', async (req, res) => {
     try {
-        // Get all logs ordered by timestamp
-        const { data: allLogs, error: logsError } = await supabase
+        const {
+            sortBy = 'data_log',
+            sortOrder = 'desc',
+            filterDate,
+            filterAction
+        } = req.query;
+
+        const allowedSortColumns = ['id_log', 'id_utilizator', 'nume_utilizator', 'data_log', 'tip_log'];
+        const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'data_log';
+
+        let query = supabase
             .from('loguri_prezenta')
             .select(`
                 id_log,
@@ -23,8 +32,23 @@ router.get('/loguri-prezenta', async (req, res) => {
                         nume_utilizator
                     )
                 )
-            `)
-            .order('data_log', { ascending: false });
+            `);
+
+        // Add date filter if provided
+        if (filterDate) {
+            query = query.gte('data_log', `${filterDate}T00:00:00`)
+                        .lte('data_log', `${filterDate}T23:59:59`);
+        }
+
+        // Add action type filter if provided
+        if (filterAction) {
+            query = query.eq('tip_log', filterAction);
+        }
+
+        // Add sorting
+        query = query.order(validSortBy, { ascending: sortOrder === 'asc' });
+
+        const { data: allLogs, error: logsError } = await query;
 
         if (logsError) throw logsError;
 
@@ -56,7 +80,6 @@ router.get('/loguri-prezenta', async (req, res) => {
             nume_utilizator: log.angajati?.utilizatori?.nume_utilizator || 'Unknown'
         }));
 
-        // Send both the users in count and the logs data
         res.json({
             usersCurrentlyIn: usersIn.length,
             usersInDetails: usersIn,

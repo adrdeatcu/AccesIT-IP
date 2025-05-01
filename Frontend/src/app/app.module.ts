@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
 import { HomeComponent } from './components/home/home.component';
@@ -16,9 +18,12 @@ import { PortarHomeComponent } from './components/portar-home/portar-home.compon
 import { RoleGuard } from './guards/role.guard';
 import { AdminUtilizatoriComponent } from './components/admin-utilizatori/admin-utilizatori.component';
 import { AdminCreareUtilizatorComponent } from './components/admin-creare-utilizator/admin-creare-utilizator.component';
-import { PortarLoguriComponent } from './components/portar-loguri/portar-loguri.component';
 import { NormalLoguriComponent } from './components/normal-loguri/normal-loguri.component';
 import { AdminAngajatiComponent } from './components/admin-angajati/admin-angajati.component';
+import { PortarManualLogComponent } from './components/portar-manual-log/portar-manual-log.component';
+import { PortarLoguriComponent } from './components/portar-loguri/portar-loguri.component';
+
+
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -76,8 +81,15 @@ const routes: Routes = [
     path: 'admin/angajati',
     component: AdminAngajatiComponent,
     canActivate: [RoleGuard],
-    data: { role: 'Admin' }
+    data: { role: ['Admin', 'HR'] }
+  },
+  {
+    path: 'portar/log-manual',
+    component: PortarManualLogComponent,
+    canActivate: [RoleGuard],
+    data: { role: 'Portar' }
   }
+
 ];
 
 @NgModule({
@@ -94,14 +106,18 @@ const routes: Routes = [
     AdminCreareUtilizatorComponent,
     PortarLoguriComponent,
     NormalLoguriComponent,
-    AdminAngajatiComponent
+    AdminAngajatiComponent,
+    PortarManualLogComponent,
+  
   ],
   imports: [
     BrowserModule,
     CommonModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent],

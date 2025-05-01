@@ -83,6 +83,8 @@ const diviziiRoutes = require('./routes/divizii.routes');
 app.use('/api', diviziiRoutes);
 const angajatiRoutes = require('./routes/angajati.routes');
 app.use('/api', angajatiRoutes);
+const logManualRoutes = require('./routes/log-manual.routes');
+app.use('/api', logManualRoutes);
 
 // Create HTTP server after all routes are defined
 const server = http.createServer(app);

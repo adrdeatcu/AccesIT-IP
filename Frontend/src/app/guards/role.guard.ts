@@ -20,11 +20,19 @@ export class RoleGuard implements CanActivate {
       return false;
     }
 
-    if (userRole === requiredRole) {
-      return true;
+    // Handle array of roles
+    if (Array.isArray(requiredRole)) {
+      if (requiredRole.includes(userRole)) {
+        return true;
+      }
+    } else {
+      // Handle single role
+      if (userRole === requiredRole) {
+        return true;
+      }
     }
 
-    this.router.navigate(['/unauthorized']);
+    this.router.navigate(['/login']);
     return false;
   }
 }

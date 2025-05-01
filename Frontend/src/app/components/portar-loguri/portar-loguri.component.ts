@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+
 interface LogResponse {
   usersCurrentlyIn: number;
   usersInDetails: UserInDetail[];
@@ -32,15 +33,32 @@ export class PortarLoguriComponent implements OnInit {
   loguri: LogPrezenta[] = [];
   usersCurrentlyIn = 0;
   usersInDetails: UserInDetail[] = [];
+  currentSortColumn: string = 'data_log';
+  sortDirection: 'asc' | 'desc' = 'desc';
+  selectedDate: string = '';
+  selectedAction: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    
+  ) {}
 
   ngOnInit() {
     this.loadLoguri();
   }
 
   private loadLoguri() {
-    this.http.get<LogResponse>('http://localhost:3000/api/loguri-prezenta')
+    let url = `http://localhost:3000/api/loguri-prezenta?sortBy=${this.currentSortColumn}&sortOrder=${this.sortDirection}`;
+    
+    if (this.selectedDate) {
+      url += `&filterDate=${this.selectedDate}`;
+    }
+    
+    if (this.selectedAction) {
+      url += `&filterAction=${this.selectedAction}`;
+    }
+
+    this.http.get<LogResponse>(url)
       .subscribe({
         next: (response) => {
           this.loguri = response.logs;
@@ -48,8 +66,40 @@ export class PortarLoguriComponent implements OnInit {
           this.usersInDetails = response.usersInDetails;
         },
         error: (error) => {
+          
           console.error('Error loading logs:', error);
         }
       });
+  }
+
+  toggleSort(column: string) {
+    if (this.currentSortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.currentSortColumn = column;
+      this.sortDirection = 'desc';
+    }
+    this.loadLoguri();
+  }
+
+  getSortIcon(column: string): string {
+    if (this.currentSortColumn !== column) return 'bi-sort';
+    return this.sortDirection === 'asc' ? 'bi-sort-down' : 'bi-sort-up';
+  }
+
+  onDateSelect(event: any) {
+    this.selectedDate = event.target.value;
+    this.loadLoguri();
+  }
+
+  onActionSelect(event: any) {
+    this.selectedAction = event.target.value;
+    this.loadLoguri();
+  }
+
+  clearFilters() {
+    this.selectedDate = '';
+    this.selectedAction = '';
+    this.loadLoguri();
   }
 }

@@ -9,11 +9,27 @@ const supabase = createClient(
 
 router.get('/angajati', async (req, res) => {
     try {
-        const { data, error } = await supabase
+        const { 
+            sortBy = 'id_utilizator', 
+            sortOrder = 'asc',
+            filterDate 
+        } = req.query;
+        
+        const allowedSortColumns = ['id_utilizator', 'nume', 'prenume', 'data_acordarii'];
+        const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'id_utilizator';
+        
+        let query = supabase
             .from('angajati')
             .select('*')
-            .order('nume');
+            .order(validSortBy, { ascending: sortOrder === 'asc' });
 
+        // Add date filter if provided
+        if (filterDate) {
+            query = query.gte('data_acordarii', `${filterDate}T00:00:00`)
+                        .lte('data_acordarii', `${filterDate}T23:59:59`);
+        }
+
+        const { data, error } = await query;
         if (error) throw error;
 
         res.json(data);
