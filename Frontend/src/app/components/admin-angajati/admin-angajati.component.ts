@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 interface Angajat {
   id_utilizator: number;
@@ -31,7 +32,10 @@ export class AdminAngajatiComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
   selectedDate: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadAngajati();
@@ -78,5 +82,15 @@ export class AdminAngajatiComponent implements OnInit {
   clearDateFilter() {
     this.selectedDate = '';
     this.loadAngajati();
+  }
+
+  getHomeRoute(): string {
+    const userRole = this.authService.getUserRole();
+    if (userRole === 'Admin') {
+      return '/admin-home';
+    } else if (userRole === 'HR') {
+      return '/hr-home';
+    }
+    return '/login';
   }
 }

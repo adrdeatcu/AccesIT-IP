@@ -27,8 +27,16 @@ import { FooterComponent } from './components/footer/footer.component';
 
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'login', component: LoginComponent },
+  { 
+    path: '', 
+    component: LoginComponent,
+    data: { hideNav: true }
+  },
+  { 
+    path: 'login', 
+    component: LoginComponent,
+    data: { hideNav: true }
+  },
   { path: 'register', component: RegisterComponent },
   {
   path: 'normal-home',

@@ -1,25 +1,55 @@
-
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrl: './nav.component.css',
   standalone: false
 })
 export class NavComponent {
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  hideNav = false;
 
-  isLoggedIn(): boolean {
-    return !!(this.authService.getUserRole() && localStorage.getItem('token'));
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
+  ) {
+    // Subscribe to router events to check route data
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      let route = this.activatedRoute;
+      while (route.firstChild) {
+        route = route.firstChild;
+      }
+      this.hideNav = route.snapshot.data['hideNav'] === true;
+    });
   }
 
-  logout(): void {
+  isLoggedIn() {
+    return this.getUserRole() !== '';
+  }
+
+  getUserRole(): string {
+    return this.authService.getUserRole();
+  }
+
+  getHomeRoute() {
+    if (this.authService.isAdmin()) {
+      return '/admin-home';
+    } else if (this.authService.isHR()) {
+      return '/hr-home';
+    } else if (this.authService.isPortar()) {
+      return '/gate-home';
+    } else if (this.authService.isNormal()) {
+      return '/normal-home';
+    }
+    return '/login';
+  }
+
+  logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
