@@ -7,13 +7,13 @@ const loginRoutes = require('./routes/login.routes');
 const bodyParser = require('body-parser');
 const WebSocket = require('ws');
 const http = require('http');
+const deleteUserRoutes = require('./routes/delete-user.routes');
 
 // Initialize Express app
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-
 
 // Add after app initialization, before routes
 app.use((req, res, next) => {
@@ -87,10 +87,10 @@ const logManualRoutes = require('./routes/log-manual.routes');
 app.use('/api', logManualRoutes);
 const deleteLogRoutes = require('./routes/delete-log.routes');
 app.use('/api', deleteLogRoutes);
+app.use('/api', deleteUserRoutes);
 
 // Create HTTP server after all routes are defined
 const server = http.createServer(app);
-
 
 // Replace your existing server start with this:
 const PORT = process.env.PORT || 3000;

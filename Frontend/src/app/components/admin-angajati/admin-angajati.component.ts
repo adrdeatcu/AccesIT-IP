@@ -93,4 +93,20 @@ export class AdminAngajatiComponent implements OnInit {
     }
     return '/login';
   }
+
+  deleteUser(id_utilizator: number) {
+    if (confirm('Are you sure you want to delete this user?')) {
+        this.http.delete(`http://localhost:3000/api/delete-user/${id_utilizator}`)
+            .subscribe({
+                next: () => {
+                    // Refresh the users list
+                    this.loadAngajati();
+                },
+                error: (error) => {
+                    console.error('Error deleting user:', error);
+                    alert('Failed to delete user');
+                }
+            });
+    }
+  } 
 }

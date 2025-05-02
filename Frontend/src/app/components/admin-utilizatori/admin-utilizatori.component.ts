@@ -70,17 +70,16 @@ export class AdminUtilizatoriComponent implements OnInit {
     this.loadUtilizatori();
   }
 
-  deleteUser(id: number) {
-    if (confirm('Sigur doriți să ștergeți acest utilizator?')) {
-        this.http.delete(`http://localhost:3000/api/utilizatori/${id}`)
+  deleteUser(id_utilizator: number) {
+    if (confirm('Are you sure you want to delete this user?')) {
+        this.http.delete(`http://localhost:3000/api/delete-user/${id_utilizator}`)
             .subscribe({
                 next: () => {
-                    this.utilizatori = this.utilizatori.filter(user => user.id_utilizator !== id);
-                    alert('Utilizator șters cu succes');
+                    this.loadUtilizatori();
                 },
                 error: (error) => {
                     console.error('Error deleting user:', error);
-                    alert(error.error.error || 'Eroare la ștergerea utilizatorului');
+                    alert('Failed to delete user');
                 }
             });
     }
