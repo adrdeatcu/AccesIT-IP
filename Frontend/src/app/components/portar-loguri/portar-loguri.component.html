@@ -59,6 +59,8 @@
                             <th style="cursor: pointer" (click)="toggleSort('data_log')">
                                 Data și Ora <i class="bi" [ngClass]="getSortIcon('data_log')"></i>
                             </th>
+                            <th style="cursor: pointer">
+                                Actiuni <i class="bi"></i>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,6 +77,14 @@
                                 </span>
                             </td>
                             <td>{{ log.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                            <td>
+                                <button 
+                                    class="btn btn-danger" 
+                                    (click)="deleteLog(log.id)">
+                                    <i class="bi bi-trash"></i>
+                                    Sterge log
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

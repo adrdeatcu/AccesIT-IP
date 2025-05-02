@@ -102,4 +102,18 @@ export class PortarLoguriComponent implements OnInit {
     this.selectedAction = '';
     this.loadLoguri();
   }
+
+  deleteLog(logId: number) {
+    if (confirm('Are you sure you want to delete this log?')) {
+      this.http.delete(`http://localhost:3000/api/delete-log/${logId}`)
+        .subscribe({
+          next: () => {
+            this.loadLoguri();
+          },
+          error: (error) => {
+            console.error('Error deleting log:', error);
+          }
+        });
+    }
+  }
 }
