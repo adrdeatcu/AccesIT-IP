@@ -22,6 +22,7 @@ import { NormalLoguriComponent } from './components/normal-loguri/normal-loguri.
 import { AdminAngajatiComponent } from './components/admin-angajati/admin-angajati.component';
 import { PortarManualLogComponent } from './components/portar-manual-log/portar-manual-log.component';
 import { PortarLoguriComponent } from './components/portar-loguri/portar-loguri.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 
 
@@ -108,6 +109,7 @@ const routes: Routes = [
     NormalLoguriComponent,
     AdminAngajatiComponent,
     PortarManualLogComponent,
+    FooterComponent,
   
   ],
   imports: [
