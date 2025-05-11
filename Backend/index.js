@@ -1,4 +1,4 @@
-require('dotenv').config(); // Ensure this is at the top
+require('dotenv').config(); 
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
@@ -87,6 +87,8 @@ const logManualRoutes = require('./routes/log-manual.routes');
 app.use('/api', logManualRoutes);
 const deleteLogRoutes = require('./routes/delete-log.routes');
 app.use('/api', deleteLogRoutes);
+const addVisitorRoutes = require('./routes/adaugare-vizitator.routes');
+app.use('/api', addVisitorRoutes);
 app.use('/api', deleteUserRoutes);
 
 // Create HTTP server after all routes are defined

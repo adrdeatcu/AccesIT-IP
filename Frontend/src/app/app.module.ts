@@ -23,6 +23,7 @@ import { AdminAngajatiComponent } from './components/admin-angajati/admin-angaja
 import { PortarManualLogComponent } from './components/portar-manual-log/portar-manual-log.component';
 import { PortarLoguriComponent } from './components/portar-loguri/portar-loguri.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { PortarAdaugareVizitatorComponent } from './components/portar-adaugare-vizitator/portar-adaugare-vizitator.component';
 
 
 
@@ -97,6 +98,12 @@ const routes: Routes = [
     component: PortarManualLogComponent,
     canActivate: [RoleGuard],
     data: { role: 'Portar' }
+  },
+  {
+    path: 'portar/adaugare-vizitator',
+  component: PortarAdaugareVizitatorComponent,
+  canActivate: [RoleGuard],
+  data: { role: 'Portar' }  
   }
 
 ];
@@ -118,6 +125,7 @@ const routes: Routes = [
     AdminAngajatiComponent,
     PortarManualLogComponent,
     FooterComponent,
+    PortarAdaugareVizitatorComponent,
   
   ],
   imports: [
