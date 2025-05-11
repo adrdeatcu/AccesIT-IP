@@ -9,29 +9,29 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './hr-home.component.css'
 })
 export class HrHomeComponent implements OnInit {
-  prenume: string = ''; 
+  nume: string = '';
 
-   constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private authService: AuthService, private http: HttpClient) {}
 
   ngOnInit(): void {
     const currentUser = this.authService.getCurrentUser();
     if (currentUser) {
       const id_utilizator = currentUser.id_utilizator;
 
-      // Fetch prenume from the angajati table
+      // Fetch nume from the angajati table
       this.http.get<any>(`http://localhost:3000/api/angajati/${id_utilizator}`)
         .subscribe({
           next: (response) => {
-            this.prenume = response.prenume || 'Utilizator'; // Default to 'Utilizator' if prenume is missing
+            this.nume = response.nume || 'Utilizator'; // Default to 'Utilizator' if nume is missing
           },
           error: (error) => {
-            console.error('Error fetching prenume:', error);
-            this.prenume = 'Utilizator'; // Fallback in case of error
+            console.error('Error fetching nume:', error);
+            this.nume = 'Utilizator'; // Fallback in case of error
           }
         });
     } else {
       console.warn('No user data found in AuthService');
-      this.prenume = 'Utilizator';
+      this.nume = 'Utilizator';
     }
   }
 }

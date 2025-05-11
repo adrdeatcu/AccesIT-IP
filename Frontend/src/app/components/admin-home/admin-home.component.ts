@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './admin-home.component.css'
 })
 export class AdminHomeComponent implements OnInit {
-  prenume: string = ''; 
+  nume: string = ''; 
 
    constructor(private authService: AuthService, private http: HttpClient) {}
 
@@ -22,16 +22,16 @@ export class AdminHomeComponent implements OnInit {
       this.http.get<any>(`http://localhost:3000/api/angajati/${id_utilizator}`)
         .subscribe({
           next: (response) => {
-            this.prenume = response.prenume || 'Utilizator'; // Default to 'Utilizator' if prenume is missing
+            this.nume = response.nume || 'Utilizator'; // Default to 'Utilizator' if prenume is missing
           },
           error: (error) => {
             console.error('Error fetching prenume:', error);
-            this.prenume = 'Utilizator'; // Fallback in case of error
+            this.nume = 'Utilizator'; // Fallback in case of error
           }
         });
     } else {
       console.warn('No user data found in AuthService');
-      this.prenume = 'Utilizator';
+      this.nume = 'Utilizator';
     }
   }
 }

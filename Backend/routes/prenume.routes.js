@@ -14,7 +14,7 @@ router.get('/angajati/:id_utilizator', async (req, res) => {
         // Fetch the prenume from the angajati table
         const { data, error } = await supabase
             .from('angajati')
-            .select('prenume')
+            .select('nume')
             .eq('id_utilizator', id_utilizator)
             .single();
 
