@@ -71,4 +71,14 @@ export class AuthService {
   isNormal(): boolean {
     return this.getUserRole() === 'Normal';
   }
+
+  
+
+  getCurrentUser(): any {
+    if (isPlatformBrowser(this.platformId)) {
+      const user = localStorage.getItem('user');
+      return user ? JSON.parse(user) : null;
+    }
+    return null;
+  }
 }
