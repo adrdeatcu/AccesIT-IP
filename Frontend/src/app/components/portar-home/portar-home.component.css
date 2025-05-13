@@ -166,8 +166,8 @@
     position: absolute;
     right: 0px; 
     bottom: 100px;
-    width: 100px;  /* Width of the fence section */
-    height: 180px; /* Same height as the right post */
+    width: 100px;  
+    height: 180px; 
     background-image: repeating-linear-gradient(
         45deg,
         transparent,

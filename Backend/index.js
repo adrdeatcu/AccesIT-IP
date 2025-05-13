@@ -90,6 +90,8 @@ app.use('/api', deleteLogRoutes);
 const addVisitorRoutes = require('./routes/adaugare-vizitator.routes');
 app.use('/api', addVisitorRoutes);
 const prenumeRoutes = require('./routes/prenume.routes');
+const vizitatoriRoutes = require('./routes/vizitatori.routes');
+app.use('/api', vizitatoriRoutes);
 app.use('/api', prenumeRoutes);
 app.use('/api', deleteUserRoutes);
 

@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'Numele de utilizator și parola sunt obligatorii' });
         }
 
-        // Check if username already exists (no CNP check)
+        // Check if username already exists 
         const { data: existingUser, error: findError } = await supabase
             .from('utilizatori')
             .select('*')

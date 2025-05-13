@@ -17,7 +17,7 @@ router.post('/adaugare-vizitator', async (req, res) => {
       }
   
       const result = await supabase
-        .from('vizitator')
+        .from('vizitatori')
         .insert([{ cnp, ora_intrare, ora_iesire }])
         .select();
   

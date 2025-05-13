@@ -1,0 +1,69 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Gestionare Vizitatori</h2>
+
+  <!-- Date filter -->
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <div class="input-group">
+        <input 
+          type="date" 
+          class="form-control" 
+          [value]="selectedDate" 
+          (change)="onDateSelect($event)" 
+          placeholder="Filtrează după dată">
+        <button 
+          class="btn btn-outline-secondary" 
+          type="button" 
+          (click)="clearDateFilter()">
+          <i class="bi bi-x-circle"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th (click)="toggleSort('id_vizitator')" style="cursor:pointer">
+            ID Vizitator <i class="bi" [ngClass]="getSortIcon('id_vizitator')"></i>
+          </th>
+          <th (click)="toggleSort('cnp')" style="cursor:pointer">
+            CNP <i class="bi" [ngClass]="getSortIcon('cnp')"></i>
+          </th>
+          <th (click)="toggleSort('ora_intrare')" style="cursor:pointer">
+            Ora Intrare <i class="bi" [ngClass]="getSortIcon('ora_intrare')"></i>
+          </th>
+          <th (click)="toggleSort('ora_iesire')" style="cursor:pointer">
+            Ora Ieșire <i class="bi" [ngClass]="getSortIcon('ora_iesire')"></i>
+          </th>
+          <th>Acțiuni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of logs">
+          <td>{{ log.id_vizitator }}</td>
+          <td>{{ log.cnp }}</td>
+          <td>{{ log.ora_intrare | date:'short' }}</td>
+          <td>
+            {{ log.ora_iesire 
+               ? (log.ora_iesire | date:'short') 
+               : '—' }}
+          </td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="deleteLog(log.id_vizitator)">
+                <i class="bi bi-trash"></i> 
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="logs.length === 0">
+          <td colspan="5" class="text-center">Nu există înregistrări.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button class="btn btn-secondary mt-3" routerLink="/gate-home">
+    <i class="bi bi-arrow-left"></i> Înapoi
+  </button>
+</div>

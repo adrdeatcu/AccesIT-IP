@@ -24,6 +24,7 @@ import { PortarManualLogComponent } from './components/portar-manual-log/portar-
 import { PortarLoguriComponent } from './components/portar-loguri/portar-loguri.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PortarAdaugareVizitatorComponent } from './components/portar-adaugare-vizitator/portar-adaugare-vizitator.component';
+import { PortarVizitatoriComponent } from './components/portar-vizitatori/portar-vizitatori.component';
 
 
 
@@ -104,6 +105,12 @@ const routes: Routes = [
   component: PortarAdaugareVizitatorComponent,
   canActivate: [RoleGuard],
   data: { role: 'Portar' }  
+  },
+  {
+    path: 'portar/vizitatori',
+    component: PortarVizitatoriComponent, 
+    canActivate: [RoleGuard],
+    data: { role: 'Portar' }
   }
 
 ];
@@ -126,6 +133,7 @@ const routes: Routes = [
     PortarManualLogComponent,
     FooterComponent,
     PortarAdaugareVizitatorComponent,
+    PortarVizitatoriComponent,
   
   ],
   imports: [
