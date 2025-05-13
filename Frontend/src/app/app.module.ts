@@ -4,9 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
 import { HomeComponent } from './components/home/home.component';
@@ -25,6 +23,7 @@ import { PortarLoguriComponent } from './components/portar-loguri/portar-loguri.
 import { FooterComponent } from './components/footer/footer.component';
 import { PortarAdaugareVizitatorComponent } from './components/portar-adaugare-vizitator/portar-adaugare-vizitator.component';
 import { PortarVizitatoriComponent } from './components/portar-vizitatori/portar-vizitatori.component';
+import { NormalProfileComponent } from './components/normal-profile/normal-profile.component';
 
 
 
@@ -111,8 +110,13 @@ const routes: Routes = [
     component: PortarVizitatoriComponent, 
     canActivate: [RoleGuard],
     data: { role: 'Portar' }
+  },
+  {
+    path: 'normal/normal-profile',
+    component: NormalProfileComponent,  
+    canActivate: [RoleGuard],
+    data: { role: ['Normal', 'Portar', 'HR'] }
   }
-
 ];
 
 @NgModule({
@@ -134,6 +138,7 @@ const routes: Routes = [
     FooterComponent,
     PortarAdaugareVizitatorComponent,
     PortarVizitatoriComponent,
+    NormalProfileComponent,
   
   ],
   imports: [

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
+const authMiddleware = require('../middleware/auth.middleware');
 
 const supabase = createClient(
     process.env.SUPABASE_URL,
@@ -117,6 +118,50 @@ router.delete('/utilizatori/:id', async (req, res) => {
         res.status(500).json({ 
             error: 'Eroare la ștergerea utilizatorului și a datelor asociate'
         });
+    }
+});
+
+router.get('/utilizatori/me', authMiddleware, async (req, res) => {
+    try {
+        const userId = req.user.id_utilizator;
+
+        const { data, error } = await supabase
+            .from('utilizatori')
+            .select(`
+                id_utilizator,
+                nume_utilizator,
+                rol,
+                created_at,
+                updated_at,
+                angajati (
+                    prenume,
+                    nume,
+                    cnp,
+                    poza,
+                    nr_legitimatie,
+                    id_divizie,
+                    cod_bluetooth,
+                    identificator_smartphone,
+                    nr_masina,
+                    acces_activ,
+                    cnp_acordat_de,
+                    badge_acordat_de,
+                    data_acordarii,
+                    data_modificare
+                )
+            `)
+            .eq('id_utilizator', userId)
+            .single();
+
+        if (error) throw error;
+        if (!data) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json(data);
+    } catch (err) {
+        console.error('Error in GET /utilizatori/me:', err);
+        res.status(500).json({ error: 'Eroare la încărcarea profilului' });
     }
 });
 

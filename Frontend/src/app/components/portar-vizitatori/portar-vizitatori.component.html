@@ -5,15 +5,15 @@
   <div class="row mb-3">
     <div class="col-md-4">
       <div class="input-group">
-        <input 
-          type="date" 
-          class="form-control" 
-          [value]="selectedDate" 
-          (change)="onDateSelect($event)" 
+        <input
+          type="date"
+          class="form-control"
+          [value]="selectedDate"
+          (change)="onDateSelect($event)"
           placeholder="Filtrează după dată">
-        <button 
-          class="btn btn-outline-secondary" 
-          type="button" 
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
           (click)="clearDateFilter()">
           <i class="bi bi-x-circle"></i>
         </button>
@@ -46,13 +46,13 @@
           <td>{{ log.cnp }}</td>
           <td>{{ log.ora_intrare | date:'short' }}</td>
           <td>
-            {{ log.ora_iesire 
-               ? (log.ora_iesire | date:'short') 
+            {{ log.ora_iesire
+               ? (log.ora_iesire | date:'short')
                : '—' }}
           </td>
           <td>
             <button class="btn btn-sm btn-danger" (click)="deleteLog(log.id_vizitator)">
-                <i class="bi bi-trash"></i> 
+              <i class="bi bi-trash"></i>
             </button>
           </td>
         </tr>
