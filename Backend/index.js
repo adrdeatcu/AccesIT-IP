@@ -4,6 +4,7 @@ const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
 const http = require('http');
 const apiRoutes = require('./routes/api.routes');
+const adminProfileRoutes = require('./routes/admin-profile.routes');
 
 // Initialize Express app
 const app = express();
@@ -70,6 +71,9 @@ Object.entries(routes).forEach(([name, router]) => {
     console.log(`✅ Registering route: ${name}`);
     app.use('/api', router);
 });
+
+// Add the new admin profile routes
+app.use('/api', adminProfileRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;

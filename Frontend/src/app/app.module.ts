@@ -24,6 +24,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { PortarAdaugareVizitatorComponent } from './components/portar-adaugare-vizitator/portar-adaugare-vizitator.component';
 import { PortarVizitatoriComponent } from './components/portar-vizitatori/portar-vizitatori.component';
 import { NormalProfileComponent } from './components/normal-profile/normal-profile.component';
+import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
 
 
 
@@ -116,7 +117,20 @@ const routes: Routes = [
     component: NormalProfileComponent,  
     canActivate: [RoleGuard],
     data: { role: ['Normal', 'Portar', 'HR'] }
+  },
+  {
+    path: 'admin-profile',
+    component: AdminProfileComponent,
+    canActivate: [RoleGuard],
+    data: { role: 'Admin' }
+  },
+  {
+    path: 'admin/admin-profile',
+    component: AdminProfileComponent,
+    canActivate: [RoleGuard],
+    data: { role: 'Admin' }
   }
+
 ];
 
 @NgModule({
@@ -139,6 +153,7 @@ const routes: Routes = [
     PortarAdaugareVizitatorComponent,
     PortarVizitatoriComponent,
     NormalProfileComponent,
+    AdminProfileComponent,
   
   ],
   imports: [

@@ -1,0 +1,177 @@
+<div class="container mt-4" *ngIf="model && model.angajati">
+    <div class="card">
+        <div class="card-header">
+            <h3>Profilul meu</h3>
+        </div>
+        <div class="card-body">
+            <form (ngSubmit)="onSubmit()" #editForm="ngForm">
+                <!-- User Information Section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="mb-3">Informații Utilizator</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="numeUtilizator" class="form-label">Nume Utilizator</label>
+                            <input type="text"
+                                   id="numeUtilizator"
+                                   class="form-control"
+                                   [(ngModel)]="model.nume_utilizator"
+                                   (ngModelChange)="onFieldChange('nume_utilizator', $event)"
+                                   name="numeUtilizator"
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rol" class="form-label">Rol</label>
+                            <select class="form-control"
+                                    id="rol"
+                                    [(ngModel)]="model.rol"
+                                    (ngModelChange)="onFieldChange('rol', $event)"
+                                    name="rol">
+                                <option value="Admin">Admin</option>
+                                <option value="HR">HR</option>
+                                <option value="Portar">Portar</option>
+                                <option value="Normal">Normal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password Change Section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="mb-3">Schimbare Parolă</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Parolă Nouă</label>
+                            <input type="password"
+                                   id="newPassword"
+                                   class="form-control"
+                                   [(ngModel)]="passwordData.newPassword"
+                                   name="newPassword">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employee Data Section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="mb-3">Date Angajat</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="prenume" class="form-label">Prenume</label>
+                            <input type="text"
+                                   id="prenume"
+                                   class="form-control"
+                                   [(ngModel)]="model.angajati.prenume"
+                                   (ngModelChange)="onFieldChange('angajat.prenume', $event)"
+                                   name="prenume"
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nume" class="form-label">Nume</label>
+                            <input type="text"
+                                   id="nume"
+                                   class="form-control"
+                                   [(ngModel)]="model.angajati.nume"
+                                   (ngModelChange)="onFieldChange('angajat.nume', $event)"
+                                   name="nume"
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cnp" class="form-label">CNP</label>
+                            <input type="text"
+                                   id="cnp"
+                                   class="form-control"
+                                   [(ngModel)]="model.angajati.cnp"
+                                   (ngModelChange)="onFieldChange('angajat.cnp', $event)"
+                                   name="cnp"
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nrLegitimatie" class="form-label">Nr. Legitimație</label>
+                            <input type="text"
+                                   id="nrLegitimatie"
+                                   class="form-control"
+                                   [(ngModel)]="model.angajati.nr_legitimatie"
+                                   (ngModelChange)="onFieldChange('angajat.nr_legitimatie', $event)"
+                                   name="nrLegitimatie">
+                        </div>
+                        <div class="mb-3">
+                            <label for="codBluetooth" class="form-label">Cod Bluetooth</label>
+                            <input type="text"
+                                   id="codBluetooth"
+                                   class="form-control"
+                                   [(ngModel)]="model.angajati.cod_bluetooth"
+                                   (ngModelChange)="onFieldChange('angajat.cod_bluetooth', $event)"
+                                   name="codBluetooth">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="idSmartphone" class="form-label">ID Smartphone</label>
+                            <input type="text"
+                                   id="idSmartphone"
+                                   class="form-control"
+                                   [(ngModel)]="model.angajati.identificator_smartphone"
+                                   (ngModelChange)="onFieldChange('angajat.identificator_smartphone', $event)"
+                                   name="idSmartphone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="nrMasina" class="form-label">Nr. Mașină</label>
+                            <input type="text"
+                                   id="nrMasina"
+                                   class="form-control"
+                                   [(ngModel)]="model.angajati.nr_masina"
+                                   (ngModelChange)="onFieldChange('angajat.nr_masina', $event)"
+                                   name="nrMasina">
+                        </div>
+                        <div class="mb-3">
+                            <label for="accesActiv" class="form-label">Acces Activ</label>
+                            <select class="form-control"
+                                    id="accesActiv"
+                                    [(ngModel)]="model.angajati.acces_activ"
+                                    (ngModelChange)="onFieldChange('angajat.acces_activ', $event)"
+                                    name="accesActiv">
+                                <option [ngValue]="true">Da</option>
+                                <option [ngValue]="false">Nu</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cnpAcordatDe" class="form-label">CNP Acordat De</label>
+                            <input type="text"
+                                   id="cnpAcordatDe"
+                                   class="form-control"
+                                   [(ngModel)]="model.angajati.cnp_acordat_de"
+                                   (ngModelChange)="onFieldChange('angajat.cnp_acordat_de', $event)"
+                                   name="cnpAcordatDe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="badgeAcordatDe" class="form-label">Badge Acordat De</label>
+                            <input type="text"
+                                   id="badgeAcordatDe"
+                                   class="form-control"
+                                   [(ngModel)]="model.angajati.badge_acordat_de"
+                                   (ngModelChange)="onFieldChange('angajat.badge_acordat_de', $event)"
+                                   name="badgeAcordatDe">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        Salvează
+                    </button>
+                    <button type="button"
+                            class="btn btn-secondary"
+                            (click)="onCancel()">
+                        Anulează
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

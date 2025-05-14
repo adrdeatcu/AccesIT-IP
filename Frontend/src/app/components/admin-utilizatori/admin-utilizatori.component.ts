@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Utilizator {
-  id_utilizator: number;
+  id_utilizator: number;  // Changed from string to number
   nume_utilizator: string;
   rol: string;
-  data_creare: Date;
+  data_creare: string;
 }
 
 @Component({
@@ -20,7 +21,7 @@ export class AdminUtilizatoriComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
   selectedDate: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
     this.loadUtilizatori();
@@ -83,5 +84,10 @@ export class AdminUtilizatoriComponent implements OnInit {
                 }
             });
     }
+  }
+
+  editUser(userId: number) {  // Changed from string to number
+    localStorage.setItem('selectedUserId', userId.toString());
+    this.router.navigate(['/admin/admin-profile']);
   }
 }
