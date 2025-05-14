@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
 const http = require('http');
+const apiRoutes = require('./routes/api.routes');
 
 // Initialize Express app
 const app = express();
@@ -60,7 +61,8 @@ const routes = {
     prenume: validateRouter(require('./routes/prenume.routes'), 'prenume'),
     vizitatori: validateRouter(require('./routes/vizitatori.routes'), 'vizitatori'),
     normalProfile: validateRouter(require('./routes/normal-profile.routes'), 'normalProfile'),
-    deleteUser: validateRouter(require('./routes/delete-user.routes'), 'deleteUser')
+    deleteUser: validateRouter(require('./routes/delete-user.routes'), 'deleteUser'),
+    api: validateRouter(apiRoutes, 'api')
 };
 
 // Register routes
@@ -69,10 +71,13 @@ Object.entries(routes).forEach(([name, router]) => {
     app.use('/api', router);
 });
 
+// Start the server
+const PORT = process.env.PORT || 3000;
+
 // Create HTTP server
 const server = http.createServer(app);
 
-const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`ESP32 test endpoint: http://localhost:${PORT}/api/test`);
 });

@@ -36,6 +36,11 @@ export class NavComponent {
     return this.authService.getUserRole();
   }
 
+  getUserId(): string {
+    // Assuming AuthService stores the logged-in user ID somewhere,
+    // e.g. in localStorage or in-memory after login.
+    return this.authService.getUserId();
+  }
   getHomeRoute() {
     if (this.authService.isAdmin()) {
       return '/admin-home';

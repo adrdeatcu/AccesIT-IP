@@ -72,7 +72,10 @@ export class AuthService {
     return this.getUserRole() === 'Normal';
   }
 
-  
+  getUserId(): string {
+    const user = this.getCurrentUser();
+    return user?.id_utilizator ?? '';
+  }  
 
   getCurrentUser(): any {
     if (isPlatformBrowser(this.platformId)) {
