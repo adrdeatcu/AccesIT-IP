@@ -28,8 +28,8 @@
                     <th style="cursor: pointer" (click)="toggleSort('id_utilizator')">
                         ID <i class="bi" [ngClass]="getSortIcon('id_utilizator')"></i>
                     </th>
-                    <th style="cursor: pointer" (click)="toggleSort('nume_utilizator')">
-                        Nume Utilizator <i class="bi" [ngClass]="getSortIcon('nume_utilizator')"></i>
+                    <th style="cursor: pointer" (click)="toggleSort('email')">
+                        Email <i class="bi" [ngClass]="getSortIcon('email')"></i>
                     </th>
                     <th style="cursor: pointer" (click)="toggleSort('rol')">
                         Rol <i class="bi" [ngClass]="getSortIcon('rol')"></i>
@@ -43,7 +43,7 @@
             <tbody>
                 <tr *ngFor="let user of utilizatori">
                     <td>{{user.id_utilizator}}</td>
-                    <td>{{user.nume_utilizator}}</td>
+                    <td>{{user.email}}</td>
                     <td>{{user.rol}}</td>
                     <td>{{user.data_creare | date:'dd/MM/yyyy HH:mm'}}</td>
                     <td>

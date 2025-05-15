@@ -12,7 +12,6 @@ export class LoginComponent {
   loginData = {
     email: '',
     parola: '',
-    rol: ''
   };
 
   constructor(
@@ -22,21 +21,13 @@ export class LoginComponent {
   ) {}
 
   onSubmit() {
-    if (!this.loginData.rol) {
-      alert('Va rugam selectati un rol');
-      return;
-    }
-
+    
     this.http.post('http://localhost:3000/api/login', this.loginData)
       .subscribe({
         next: (response: any) => {
           // Log the token for debugging
           console.log('Received token:', response.token);
           
-          if (response.user.rol !== this.loginData.rol) {
-            alert('Rolul selectat nu corespunde cu rolul utilizatorului');
-            return;
-          }
 
           // Store both token and user data
           localStorage.setItem('token', response.token);

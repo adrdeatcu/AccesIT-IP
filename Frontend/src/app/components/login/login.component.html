@@ -32,24 +32,7 @@
                                    name="parola" 
                                    required>
                         </div>
-                        <div class="mb-3">
-                            <label for="rol" class="form-label">Rol</label>
-                            <select class="form-select" 
-                                    id="rol" 
-                                    [(ngModel)]="loginData.rol" 
-                                    name="rol" 
-                                    #rol="ngModel"
-                                    required>
-                                <option value="">Selecteaza rol</option>
-                                <option value="Normal">Normal</option>
-                                <option value="Portar">Portar</option>
-                                <option value="Admin">Admin</option>
-                                <option value="HR">HR</option>
-                            </select>
-                            <div class="text-danger" *ngIf="rol.invalid && (rol.dirty || rol.touched)">
-                                Selectarea unui rol este obligatorie
-                            </div>
-                        </div>
+                       
                         <button type="submit" 
                                 class="btn btn-primary w-100"
                                 [disabled]="!loginForm.form.valid">Login</button>

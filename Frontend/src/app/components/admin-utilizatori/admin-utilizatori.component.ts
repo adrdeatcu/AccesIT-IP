@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 interface Utilizator {
-  id_utilizator: number;  // Changed from string to number
-  nume_utilizator: string;
+  id_utilizator: number;
+  email: string;  // Changed from nume_utilizator
   rol: string;
   data_creare: string;
 }

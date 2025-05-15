@@ -17,12 +17,16 @@ router.get('/utilizatori', async (req, res) => {
             filterDate 
         } = req.query;
         
-        const allowedSortColumns = ['id_utilizator', 'nume_utilizator', 'rol', 'data_creare'];
+        // Debug logs
+        console.log('Query params:', { sortBy, sortOrder, filterDate });
+        
+        const allowedSortColumns = ['id_utilizator', 'email', 'rol', 'data_creare'];
         const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'id_utilizator';
         
+        // Build query
         let query = supabase
             .from('utilizatori')
-            .select('id_utilizator, nume_utilizator, rol, data_creare');
+            .select('*'); // Select all fields for now to debug
 
         // Add date filter if provided
         if (filterDate) {
@@ -33,13 +37,23 @@ router.get('/utilizatori', async (req, res) => {
         // Add sorting
         query = query.order(validSortBy, { ascending: sortOrder === 'asc' });
 
+        // Execute query and log results
         const { data, error } = await query;
-        if (error) throw error;
         
-        res.json(data);
+        if (error) {
+            console.error('Supabase error:', error);
+            throw error;
+        }
+
+        console.log(`Found ${data?.length || 0} users`);
+        res.json(data || []);
+
     } catch (error) {
-        console.error('Error fetching users:', error);
-        res.status(500).json({ error: 'Error fetching users' });
+        console.error('Detailed error:', error);
+        res.status(500).json({ 
+            error: 'Error fetching users',
+            details: error.message
+        });
     }
 });
 
@@ -129,7 +143,7 @@ router.get('/utilizatori/me', authMiddleware, async (req, res) => {
             .from('utilizatori')
             .select(`
                 id_utilizator,
-                nume_utilizator,
+                email,
                 rol,
                 created_at,
                 updated_at,
