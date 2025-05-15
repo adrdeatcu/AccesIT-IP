@@ -61,15 +61,13 @@ router.post('/register', async (req, res) => {
                         id_utilizator: newUser.id_utilizator,
                         prenume: angajat.prenume,
                         nume: angajat.nume,
-                        cnp: angajat.cnp,
                         poza: angajat.poza,
                         nr_legitimatie: angajat.nr_legitimatie,
                         id_divizie: angajat.id_divizie,
                         cod_bluetooth: angajat.cod_bluetooth,
                         identificator_smartphone: angajat.identificator_smartphone,
                         nr_masina: angajat.nr_masina,
-                        acces_activ: angajat.acces_activ, // Use the value from frontend
-                        cnp_acordat_de: angajat.cnp_acordat_de,
+                        acces_activ: angajat.acces_activ,
                         badge_acordat_de: angajat.badge_acordat_de,
                         data_acordarii: currentTime,
                         data_modificare: null

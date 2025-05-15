@@ -6,7 +6,6 @@ interface AngajatData {
   id_utilizator: number;
   prenume: string;
   nume: string;
-  cnp: string;
   poza: string;
   nr_legitimatie: string;
   id_divizie: number;
@@ -14,7 +13,6 @@ interface AngajatData {
   identificator_smartphone: string;
   nr_masina: string;
   acces_activ: boolean;
-  cnp_acordat_de: string;
   badge_acordat_de: string;
 }
 
@@ -33,7 +31,6 @@ export class AdminCreareUtilizatorComponent {
       id_utilizator: 0, // This will be set after user creation
       prenume: '',
       nume: '',
-      cnp: '',
       poza: '',
       nr_legitimatie: '',
       id_divizie: null as number | null,
@@ -41,7 +38,6 @@ export class AdminCreareUtilizatorComponent {
       identificator_smartphone: '',
       nr_masina: '',
       acces_activ: true,
-      cnp_acordat_de: '',
       badge_acordat_de: ''
     }
   };

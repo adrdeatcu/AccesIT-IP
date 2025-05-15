@@ -6,7 +6,6 @@ interface Angajat {
   id_utilizator: number;
   prenume: string;
   nume: string;
-  cnp: string;
   poza: string;
   nr_legitimatie: string;
   id_divizie: number;
@@ -14,7 +13,6 @@ interface Angajat {
   identificator_smartphone: string;
   nr_masina: string;
   acces_activ: boolean;
-  cnp_acordat_de: string;
   badge_acordat_de: string;
   data_acordarii: string;
   data_modificare: string | null;

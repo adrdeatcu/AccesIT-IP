@@ -17,83 +17,58 @@ const handleSendString = async (req, res) => {
         console.log('📦 Headers:', req.headers);
         console.log('📄 Body:', req.body);
         
-        // Get id_utilizator from ESP32's payload
-        const receivedString = req.body?.string;
+        const receivedId = req.body?.id;
+        const direction = req.body?.direction?.toUpperCase();
         
-        if (!receivedString) {
-            console.log('⚠️ Warning: No ID received');
-            return res.status(400).json({ 
-                success: false,
-                access: false,
-                message: 'No ID provided' 
-            });
+        if (!receivedId || !direction) {
+            console.log('⚠️ Warning: Missing data');
+            return res.json({ access: false });
+        }
+
+        if (direction !== 'IN' && direction !== 'OUT') {
+            console.log('⚠️ Invalid direction:', direction);
+            return res.json({ access: false });
         }
 
         // Check user access in database
         const { data: angajat, error } = await supabase
             .from('angajati')
             .select('*')
-            .eq('id_utilizator', receivedString)
+            .eq('id_utilizator', receivedId)
             .single();
 
-        if (error) {
-            console.error('❌ Database error:', error);
-            return res.status(500).json({ 
-                success: false,
-                access: false,
-                message: 'Database error' 
-            });
+        if (error || !angajat || !angajat.acces_activ) {
+            console.log('⚠️ Access denied for ID:', receivedId);
+            return res.json({ access: false });
         }
 
-        if (!angajat) {
-            console.log('⚠️ User not found:', receivedString);
-            return res.status(403).json({ 
-                success: true,
-                access: false,
-                message: 'Access denied - User not found' 
-            });
-        }
-
-        // Check if user has active access
-        if (!angajat.acces_activ) {
-            console.log('⚠️ Access inactive for user:', receivedString);
-            return res.status(403).json({ 
-                success: true,
-                access: false,
-                message: 'Access denied - Access inactive' 
-            });
-        }
-
-        // Log successful access
-        const timestamp = new Date().toISOString();
-        await supabase
-            .from('loguri')
+        // Log successful access with correct column names
+        const { error: logError } = await supabase
+            .from('loguri_prezenta')
             .insert([{
-                id_utilizator: receivedString,
-                timestamp: timestamp,
-                tip_log: 'ESP32_ACCESS',
-                status: 'SUCCESS'
+                id_utilizator: receivedId,
+                tip_log: direction,
+                data_log: new Date().toISOString() // Using data_log instead of timestamp
             }]);
 
+        if (logError) {
+            console.error('❌ Error logging presence:', logError);
+            return res.json({ access: false });
+        }
+
+        // Use data_log in console output
+        const currentTime = new Date().toISOString();
         console.log('\n✅ Access Granted:');
-        console.log('📅 Time:', timestamp);
-        console.log('👤 User ID:', receivedString);
+        console.log('📅 Time:', currentTime);
+        console.log('👤 User ID:', receivedId);
+        console.log('🚪 Direction:', direction);
         console.log('-------------------');
 
-        res.status(200).json({ 
-            success: true,
-            access: true,
-            message: 'Access granted',
-            timestamp
-        });
+        return res.json({ access: true });
 
     } catch (error) {
         console.error('❌ Error:', error);
-        res.status(500).json({ 
-            success: false,
-            access: false,
-            message: error.message 
-        });
+        return res.json({ access: false });
     }
 };
 
