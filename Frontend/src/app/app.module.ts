@@ -25,6 +25,7 @@ import { PortarAdaugareVizitatorComponent } from './components/portar-adaugare-v
 import { PortarVizitatoriComponent } from './components/portar-vizitatori/portar-vizitatori.component';
 import { NormalProfileComponent } from './components/normal-profile/normal-profile.component';
 import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
+import { ContactInfoComponent } from './components/contact-info/contact-info.component';
 
 
 
@@ -129,6 +130,11 @@ const routes: Routes = [
     component: AdminProfileComponent,
     canActivate: [RoleGuard],
     data: { role: 'Admin' }
+  },
+  {
+    path: 'contact/contact-info',
+    component: ContactInfoComponent,
+
   }
 
 ];
@@ -154,6 +160,7 @@ const routes: Routes = [
     PortarVizitatoriComponent,
     NormalProfileComponent,
     AdminProfileComponent,
+    ContactInfoComponent,
   
   ],
   imports: [

@@ -2,12 +2,32 @@
     background-color: #f8f9fa;
     padding: 1rem 0;
     width: 100%;
-    text-align: center;
     border-top: 1px solid #dee2e6;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#contact-link{
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: color 0.3s;
+    text-decoration: underline;
+
+}
+
+#contact-link:hover{
+    color: #0056b3;
+}
+#contact-link:active{
+    color: #004085;
 }

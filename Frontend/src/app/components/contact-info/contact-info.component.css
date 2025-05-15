@@ -1,0 +1,18 @@
+#contact-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    /* Add these new properties to center the box */
+    margin: 50px auto; /* Auto margins on left and right will center the box */
+    margin-top: 250px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
