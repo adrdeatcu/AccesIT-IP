@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   loginData = {
-    nume_utilizator: '',
+    email: '',
     parola: '',
     rol: ''
   };

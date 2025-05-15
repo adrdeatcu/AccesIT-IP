@@ -8,18 +8,24 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 
 router.post('/register', async (req, res) => {
     try {
-        const { nume_utilizator, parola, rol, angajat } = req.body;
+        const { email, parola, rol, angajat } = req.body;
 
-        // Input validation - only check username and password
-        if (!nume_utilizator || !parola) {
-            return res.status(400).json({ error: 'Numele de utilizator și parola sunt obligatorii' });
+        // Input validation
+        if (!email || !parola) {
+            return res.status(400).json({ error: 'Email-ul și parola sunt obligatorii' });
         }
 
-        // Check if username already exists 
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'Format email invalid' });
+        }
+
+        // Check if email already exists 
         const { data: existingUser, error: findError } = await supabase
             .from('utilizatori')
             .select('*')
-            .eq('nume_utilizator', nume_utilizator)
+            .eq('email', email)
             .single();
 
         if (findError && findError.code !== 'PGRST116') {
@@ -27,7 +33,7 @@ router.post('/register', async (req, res) => {
         }
 
         if (existingUser) {
-            return res.status(400).json({ error: 'Numele de utilizator există deja' });
+            return res.status(400).json({ error: 'Email-ul există deja' });
         }
 
         // Hash password
@@ -38,7 +44,7 @@ router.post('/register', async (req, res) => {
             .from('utilizatori')
             .insert([
                 {
-                    nume_utilizator,
+                    email,
                     parola_hash,
                     rol: rol || 'Normal',
                     data_creare: new Date()
@@ -89,7 +95,7 @@ router.post('/register', async (req, res) => {
             message: 'Utilizator și angajat înregistrați cu succes',
             user: {
                 id_utilizator: newUser.id_utilizator,
-                nume_utilizator: newUser.nume_utilizator,
+                email: newUser.email,
                 rol: newUser.rol,
                 data_creare: newUser.data_creare
             }

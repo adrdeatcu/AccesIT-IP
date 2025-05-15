@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 interface AngajatData {
   id_utilizator: number;
@@ -24,7 +25,7 @@ interface AngajatData {
 })
 export class AdminCreareUtilizatorComponent {
   userData = {
-    nume_utilizator: '',
+    email: '',
     parola: '',
     rol: '',
     angajat: {
@@ -63,22 +64,43 @@ export class AdminCreareUtilizatorComponent {
       });
   }
 
-  onSubmit() {
-    if (!this.userData.rol) {
-        alert('Vă rugăm selectați un rol');
-        return;
+  isFormValid(form: NgForm): boolean {
+    if (!form) return false;
+    
+    // Check required fields
+    const hasRequiredFields = 
+        Boolean(this.userData.email) && 
+        Boolean(this.userData.parola) && 
+        Boolean(this.userData.rol) &&
+        Boolean(this.userData.angajat.prenume) && 
+        Boolean(this.userData.angajat.nume) &&
+        Boolean(this.userData.angajat.nr_legitimatie);
+    
+    // Check if divizie is selected (convert to number for comparison)
+    const hasDivizie = 
+        this.userData.angajat.id_divizie !== null && 
+        this.userData.angajat.id_divizie !== undefined && 
+        Number(this.userData.angajat.id_divizie) > 0;
+
+    return hasRequiredFields && hasDivizie;
+  }
+
+  onSubmit(form: NgForm) {
+    if (!this.isFormValid(form)) {
+      alert('Vă rugăm completați toate câmpurile obligatorii');
+      return;
     }
 
     this.http.post('http://localhost:3000/api/register', this.userData)
-        .subscribe({
-            next: (response) => {
-                alert('Utilizator creat cu succes!');
-                this.router.navigate(['/admin/utilizatori']);
-            },
-            error: (error) => {
-                console.error('Error creating user:', error);
-                alert(error.error.error || 'Eroare la crearea utilizatorului');
-            }
-        });
+      .subscribe({
+        next: (response) => {
+          alert('Utilizator creat cu succes!');
+          this.router.navigate(['/admin/utilizatori']);
+        },
+        error: (error) => {
+          console.error('Error creating user:', error);
+          alert(error.error.error || 'Eroare la crearea utilizatorului');
+        }
+      });
   }
 }

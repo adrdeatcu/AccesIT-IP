@@ -8,13 +8,20 @@
                 <div class="card-body">
                     <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
                         <div class="mb-3">
-                            <label for="numeUtilizator" class="form-label">Nume Utilizator</label>
-                            <input type="text" 
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" 
                                    class="form-control" 
-                                   id="numeUtilizator" 
-                                   [(ngModel)]="loginData.nume_utilizator" 
-                                   name="numeUtilizator" 
-                                   required>
+                                   id="email" 
+                                   [(ngModel)]="loginData.email" 
+                                   name="email" 
+                                   required
+                                   email>
+                            <div class="text-danger" 
+                                 *ngIf="loginForm.form.get('email')?.invalid && 
+                                        (loginForm.form.get('email')?.dirty || 
+                                         loginForm.form.get('email')?.touched)">
+                                Email invalid
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="parola" class="form-label">Parola</label>

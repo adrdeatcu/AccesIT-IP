@@ -17,18 +17,18 @@ const supabase = createClient(
 
 router.post('/login', async (req, res) => {
     try {
-        const { nume_utilizator, parola } = req.body;
+        const { email, parola } = req.body;
 
         // Input validation
-        if (!nume_utilizator || !parola) {
-            return res.status(400).json({ error: 'Numele de utilizator și parola sunt obligatorii' });
+        if (!email || !parola) {
+            return res.status(400).json({ error: 'Email-ul și parola sunt obligatorii' });
         }
 
-        // Find user by username
+        // Find user by email
         const { data: users, error: findError } = await supabase
             .from('utilizatori')
             .select('*')
-            .eq('nume_utilizator', nume_utilizator);
+            .eq('email', email);
 
         if (findError) {
             console.error('Database error:', findError);
@@ -37,22 +37,22 @@ router.post('/login', async (req, res) => {
 
         // Check if any user was found
         if (!users || users.length === 0) {
-            return res.status(401).json({ error: 'Nume de utilizator sau parolă incorecte' });
+            return res.status(401).json({ error: 'Email sau parolă incorecte' });
         }
 
-        const user = users[0]; // Get the first (and should be only) user
+        const user = users[0];
 
         // Compare passwords
         const validPassword = await bcrypt.compare(parola, user.parola_hash);
         if (!validPassword) {
-            return res.status(401).json({ error: 'Nume de utilizator sau parolă incorecte' });
+            return res.status(401).json({ error: 'Email sau parolă incorecte' });
         }
 
         // Generate JWT token 
         const token = jwt.sign(
             {
                 id_utilizator: user.id_utilizator,
-                nume_utilizator: user.nume_utilizator,
+                email: user.email,
                 rol: user.rol
             },
             process.env.JWT_SECRET,
@@ -64,7 +64,7 @@ router.post('/login', async (req, res) => {
             message: 'Autentificare reușită',
             user: {
                 id_utilizator: user.id_utilizator,
-                nume_utilizator: user.nume_utilizator,
+                email: user.email,
                 rol: user.rol
             },
             token
