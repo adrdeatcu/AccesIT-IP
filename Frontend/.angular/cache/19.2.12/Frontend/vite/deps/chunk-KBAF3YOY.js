@@ -3,7 +3,7 @@ import {
   XhrFactory,
   isPlatformServer,
   parseCookieValue
-} from "./chunk-WLTQXWYS.js";
+} from "./chunk-SWGKE2Z3.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
@@ -37,7 +37,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-UPXM2XNN.js";
+} from "./chunk-WN3SDDSJ.js";
 import {
   Observable,
   __async,
@@ -2542,9 +2542,9 @@ export {
 @angular/common/fesm2022/module-CYx9OwZ_.mjs:
 @angular/common/fesm2022/http.mjs:
   (**
-   * @license Angular v19.2.10
+   * @license Angular v19.2.11
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-6GE5IB3U.js.map
+//# sourceMappingURL=chunk-KBAF3YOY.js.map

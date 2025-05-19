@@ -1,16 +1,17 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   withHttpTransferCache
-} from "./chunk-6GE5IB3U.js";
+} from "./chunk-MTUCSO4F.js";
 import {
   EVENT_MANAGER_PLUGINS,
   EventManagerPlugin
-} from "./chunk-NGR6HSPC.js";
+} from "./chunk-JBKHJ22E.js";
 import {
   getDOM
-} from "./chunk-MCYNVD6B.js";
+} from "./chunk-D3CLZAJO.js";
 import {
   DOCUMENT
-} from "./chunk-WLTQXWYS.js";
+} from "./chunk-GKUHYSBD.js";
 import {
   ApplicationRef,
   Console,
@@ -50,7 +51,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-UPXM2XNN.js";
+} from "./chunk-ONI6NHDX.js";
 
 // node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs
 var Meta = class _Meta {
@@ -787,7 +788,7 @@ function provideClientHydration(...features) {
   }
   return makeEnvironmentProviders([typeof ngDevMode !== "undefined" && ngDevMode ? provideZoneJsCompatibilityDetector() : [], withDomHydration(), featuresKind.has(HydrationFeatureKind.NoHttpTransferCache) || hasHttpTransferCacheOptions ? [] : withHttpTransferCache({}), providers]);
 }
-var VERSION = new Version("19.2.10");
+var VERSION = new Version("19.2.11");
 
 export {
   Meta,
@@ -815,9 +816,9 @@ export {
 
 @angular/platform-browser/fesm2022/platform-browser.mjs:
   (**
-   * @license Angular v19.2.10
+   * @license Angular v19.2.11
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-2CH2CRFB.js.map
+//# sourceMappingURL=chunk-QEZVRQB6.js.map

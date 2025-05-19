@@ -12,13 +12,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="numeUtilizator" class="form-label">Nume Utilizator</label>
+                            <label for="email" class="form-label">Email</label>
                             <input type="text"
-                                   id="numeUtilizator"
+                                   id="email"
                                    class="form-control"
-                                   [(ngModel)]="model.nume_utilizator"
-                                   (ngModelChange)="onFieldChange('nume_utilizator', $event)"
-                                   name="numeUtilizator"
+                                   [(ngModel)]="model.email"
+                                   (ngModelChange)="onFieldChange('emailr', $event)"
+                                   name="email"
                                    required>
                         </div>
                         <div class="mb-3">
@@ -80,16 +80,7 @@
                                    name="nume"
                                    required>
                         </div>
-                        <div class="mb-3">
-                            <label for="cnp" class="form-label">CNP</label>
-                            <input type="text"
-                                   id="cnp"
-                                   class="form-control"
-                                   [(ngModel)]="model.angajati.cnp"
-                                   (ngModelChange)="onFieldChange('angajat.cnp', $event)"
-                                   name="cnp"
-                                   required>
-                        </div>
+                      
                         <div class="mb-3">
                             <label for="nrLegitimatie" class="form-label">Nr. Legitimație</label>
                             <input type="text"
@@ -138,15 +129,6 @@
                                 <option [ngValue]="true">Da</option>
                                 <option [ngValue]="false">Nu</option>
                             </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="cnpAcordatDe" class="form-label">CNP Acordat De</label>
-                            <input type="text"
-                                   id="cnpAcordatDe"
-                                   class="form-control"
-                                   [(ngModel)]="model.angajati.cnp_acordat_de"
-                                   (ngModelChange)="onFieldChange('angajat.cnp_acordat_de', $event)"
-                                   name="cnpAcordatDe">
                         </div>
                         <div class="mb-3">
                             <label for="badgeAcordatDe" class="form-label">Badge Acordat De</label>

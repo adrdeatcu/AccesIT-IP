@@ -4,8 +4,9 @@
             <div class="alert alert-info">
                 <h4>Persoane în incintă: {{ usersCurrentlyIn }}</h4>
                 <div class="mt-2">
+                    <!-- Replace in the users list -->
                     <small *ngFor="let user of usersInDetails" class="d-block">
-                        {{ user.nume_utilizator }} - Intrat la: {{ user.ultima_intrare | date:'HH:mm:ss' }}
+                        {{ user.nume_complet }} - Intrat la: {{ user.ultima_intrare | date:'HH:mm:ss' }}
                     </small>
                 </div>
             </div>
@@ -44,45 +45,35 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th style="cursor: pointer" (click)="toggleSort('id_log')">
-                                ID Log <i class="bi" [ngClass]="getSortIcon('id_log')"></i>
-                            </th>
-                            <th style="cursor: pointer" (click)="toggleSort('id_utilizator')">
-                                ID Utilizator <i class="bi" [ngClass]="getSortIcon('id_utilizator')"></i>
-                            </th>
-                            <th style="cursor: pointer" (click)="toggleSort('nume_utilizator')">
-                                Nume Utilizator <i class="bi" [ngClass]="getSortIcon('nume_utilizator')"></i>
-                            </th>
-                            <th style="cursor: pointer" (click)="toggleSort('tip_log')">
-                                Tip Acțiune <i class="bi" [ngClass]="getSortIcon('tip_log')"></i>
-                            </th>
-                            <th style="cursor: pointer" (click)="toggleSort('data_log')">
-                                Data și Ora <i class="bi" [ngClass]="getSortIcon('data_log')"></i>
-                            </th>
-                            <th style="cursor: pointer">
-                                Actiuni <i class="bi"></i>
+                            <th>ID</th>
+                            <th>Utilizator</th>
+                            <th>Nume Complet</th>
+                            <th>Tip Acțiune</th>
+                            <th>Timestamp</th>
+                            <th>Acțiuni</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- Replace in the table -->
                         <tr *ngFor="let log of loguri">
-                            <td>{{ log.id }}</td>
-                            <td>{{ log.id_utilizator }}</td>
-                            <td>{{ log.nume_utilizator }}</td>
+                            <td>{{log.id}}</td>
+                            <td>{{log.id_utilizator}}</td>
+                            <td>{{log.nume_complet}}</td>
                             <td>
                                 <span [ngClass]="{
                                     'badge bg-success': log.tip_actiune === 'IN',
                                     'badge bg-danger': log.tip_actiune === 'OUT'
                                 }">
-                                    {{ log.tip_actiune }}
+                                    {{log.tip_actiune}}
                                 </span>
                             </td>
-                            <td>{{ log.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                            <td>{{log.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</td>
                             <td>
                                 <button 
-                                    class="btn btn-danger" 
-                                    (click)="deleteLog(log.id)">
-                                    <i class="bi bi-trash"></i>
-                                    Sterge log
+                                    class="btn btn-sm btn-danger" 
+                                    (click)="deleteLog(log.id)"
+                                    [title]="'Delete log ' + log.id">
+                                    <i class="bi bi-trash"></i> Șterge
                                 </button>
                             </td>
                         </tr>

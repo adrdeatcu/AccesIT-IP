@@ -1,7 +1,6 @@
-import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   InjectionToken
-} from "./chunk-I45G7NBM.js";
+} from "./chunk-WN3SDDSJ.js";
 
 // node_modules/@angular/common/fesm2022/dom_tokens-rA0ACyx7.mjs
 var DOCUMENT = new InjectionToken(ngDevMode ? "DocumentToken" : "");
@@ -43,9 +42,9 @@ export {
 @angular/common/fesm2022/dom_tokens-rA0ACyx7.mjs:
 @angular/common/fesm2022/xhr-BfNfxNDv.mjs:
   (**
-   * @license Angular v19.2.10
+   * @license Angular v19.2.11
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-MJGQD2AB.js.map
+//# sourceMappingURL=chunk-SWGKE2Z3.js.map

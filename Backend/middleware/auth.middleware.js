@@ -1,20 +1,25 @@
-const jwt = require('jsonwebtoken');
+const { createClient } = require('@supabase/supabase-js');
 
-const authMiddleware = (req, res, next) => {
-    try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader) {
-            return res.status(401).json({ error: 'Token lipsă' });
-        }
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
-        const token = authHeader.replace('Bearer ', '');
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (error) {
-        console.error('Auth middleware error:', error);
-        res.status(401).json({ error: 'Token invalid' });
-    }
-};
+async function authenticate(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Token lipsă.' });
+  }
 
-module.exports = authMiddleware;
+  const token = authHeader.split(' ')[1];
+  const { data, error } = await supabase.auth.getUser(token);
+
+  if (error || !data.user) {
+    return res.status(401).json({ error: 'Token invalid.' });
+  }
+
+  req.user = data.user;
+  next();
+}
+
+module.exports = { authenticate };

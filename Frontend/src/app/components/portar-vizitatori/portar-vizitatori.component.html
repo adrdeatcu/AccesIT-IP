@@ -28,8 +28,8 @@
           <th (click)="toggleSort('id_vizitator')" style="cursor:pointer">
             ID Vizitator <i class="bi" [ngClass]="getSortIcon('id_vizitator')"></i>
           </th>
-          <th (click)="toggleSort('cnp')" style="cursor:pointer">
-            CNP <i class="bi" [ngClass]="getSortIcon('cnp')"></i>
+          <th (click)="toggleSort('nume')" style="cursor:pointer">
+            Nume <i class="bi" [ngClass]="getSortIcon('nume')"></i>
           </th>
           <th (click)="toggleSort('ora_intrare')" style="cursor:pointer">
             Ora Intrare <i class="bi" [ngClass]="getSortIcon('ora_intrare')"></i>
@@ -43,7 +43,7 @@
       <tbody>
         <tr *ngFor="let log of logs">
           <td>{{ log.id_vizitator }}</td>
-          <td>{{ log.cnp }}</td>
+          <td>{{ log.nume }}</td>
           <td>{{ log.ora_intrare | date:'short' }}</td>
           <td>
             {{ log.ora_iesire

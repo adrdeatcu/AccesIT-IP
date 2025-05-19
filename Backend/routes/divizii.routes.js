@@ -9,7 +9,7 @@ const supabase = createClient(
 );
 
 // Get all divisions
-router.get('/divizii', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('divizii')

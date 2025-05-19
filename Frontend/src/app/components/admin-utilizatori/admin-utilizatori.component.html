@@ -21,7 +21,12 @@
         </div>
     </div>
 
-    <div class="table-responsive">
+    <!-- Debug info -->
+    <div *ngIf="utilizatori.length === 0" class="alert alert-info">
+        No users found
+    </div>
+
+    <div class="table-responsive" *ngIf="utilizatori.length > 0">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -58,6 +63,7 @@
             </tbody>
         </table>
     </div>
+
     <button class="btn btn-secondary mt-3" routerLink="/admin-home">
         <i class="bi bi-arrow-left"></i> Inapoi
     </button>

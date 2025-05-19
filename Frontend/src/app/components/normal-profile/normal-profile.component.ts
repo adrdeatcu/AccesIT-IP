@@ -6,7 +6,6 @@ import { AuthService } from '../../services/auth.service';
 interface Angajat {
   prenume: string;
   nume: string;
-  cnp: string;
   poza: string;
   nr_legitimatie: string;
   id_divizie: number;
@@ -14,15 +13,14 @@ interface Angajat {
   identificator_smartphone: string;
   nr_masina: string;
   acces_activ: boolean;
-  cnp_acordat_de: string;
   badge_acordat_de: string;
 }
 
 interface Utilizator {
   id_utilizator: string;  // UUID
-  nume_utilizator: string;
+  email: string;
   rol: string;
-  data_creare: string;    // Only this timestamp field exists
+  data_creare: string;    
   angajati: Angajat;
 }
 
@@ -35,14 +33,12 @@ interface Utilizator {
 export class NormalProfileComponent implements OnInit {
   model: Utilizator = {
     id_utilizator: '',
-    nume_utilizator: '',
+    email: '',
     rol: '',
-    data_creare: '',      // Changed from created_at
-  
+    data_creare: '',
     angajati: {
       prenume: '',
       nume: '',
-      cnp: '',
       poza: '',
       nr_legitimatie: '',
       id_divizie: 0,
@@ -50,7 +46,6 @@ export class NormalProfileComponent implements OnInit {
       identificator_smartphone: '',
       nr_masina: '',
       acces_activ: false,
-      cnp_acordat_de: '',
       badge_acordat_de: ''
     }
   };
@@ -111,7 +106,7 @@ export class NormalProfileComponent implements OnInit {
 
   onSubmit() {
     const payload: any = {
-      nume_utilizator: this.model.nume_utilizator
+      email: this.model.email
     };
 
     // Add password update if provided

@@ -7,24 +7,37 @@ const supabase = createClient(
     process.env.SUPABASE_KEY
 );
 
-router.delete('/delete-log/:id_log', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
-        const { id_log } = req.params;
+        const { id } = req.params;
 
-        // Delete the log entry
+        // Validate id
+        if (!id || id === 'undefined') {
+            return res.status(400).json({ 
+                error: 'Invalid log ID provided' 
+            });
+        }
+
+        // Delete the log entry using 'id' instead of 'id_log'
         const { error } = await supabase
             .from('loguri_prezenta')
             .delete()
-            .eq('id_log', id_log);
+            .eq('id_log', id);  // Changed from 'id_log' to 'id'
 
         if (error) {
             throw error;
         }
 
-        res.status(200).json({ message: 'Log deleted successfully' });
+        res.status(200).json({ 
+            message: 'Log deleted successfully',
+            deletedId: id 
+        });
     } catch (error) {
         console.error('Error deleting log:', error);
-        res.status(500).json({ error: 'Failed to delete log' });
+        res.status(500).json({ 
+            error: 'Failed to delete log',
+            details: error.message 
+        });
     }
 });
 

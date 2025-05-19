@@ -12,16 +12,16 @@ interface LogResponse {
 
 interface UserInDetail {
   id_utilizator: number;
-  nume_utilizator: string;
+  nume_complet: string;
   ultima_intrare: string;
 }
 
 interface LogPrezenta {
-  id: number;
+  id: number;  // Changed from id_log to id
   id_utilizator: number;
   timestamp: string;
   tip_actiune: string;
-  nume_utilizator: string;
+  nume_complet: string;
 }
 
 @Component({
@@ -48,29 +48,30 @@ export class PortarLoguriComponent implements OnInit {
   }
 
   private loadLoguri() {
-    let url = `http://localhost:3000/api/loguri-prezenta?sortBy=${this.currentSortColumn}&sortOrder=${this.sortDirection}`;
+    // Change from loguri-prezenta to loguri
+    let url = `http://localhost:3000/api/loguri?sortBy=${this.currentSortColumn}&sortOrder=${this.sortDirection}`;
     
     if (this.selectedDate) {
-      url += `&filterDate=${this.selectedDate}`;
+        url += `&filterDate=${this.selectedDate}`;
     }
     
     if (this.selectedAction) {
-      url += `&filterAction=${this.selectedAction}`;
+        url += `&filterAction=${this.selectedAction}`;
     }
 
     this.http.get<LogResponse>(url)
-      .subscribe({
-        next: (response) => {
-          this.loguri = response.logs;
-          this.usersCurrentlyIn = response.usersCurrentlyIn;
-          this.usersInDetails = response.usersInDetails;
-        },
-        error: (error) => {
-          
-          console.error('Error loading logs:', error);
-        }
-      });
-  }
+        .subscribe({
+            next: (response) => {
+                console.log('Received logs:', response.logs); // Debug log
+                this.loguri = response.logs;
+                this.usersCurrentlyIn = response.usersCurrentlyIn;
+                this.usersInDetails = response.usersInDetails;
+            },
+            error: (error) => {
+                console.error('Error loading logs:', error);
+            }
+        });
+}
 
   toggleSort(column: string) {
     if (this.currentSortColumn === column) {
@@ -103,17 +104,27 @@ export class PortarLoguriComponent implements OnInit {
     this.loadLoguri();
   }
 
-  deleteLog(logId: number) {
+  deleteLog(logId: number | undefined) {
+    console.log('Attempting to delete log with ID:', logId);
+
+    if (typeof logId !== 'number') {
+        console.error('Invalid log ID:', logId);
+        alert('Cannot delete log: Invalid ID');
+        return;
+    }
+
     if (confirm('Are you sure you want to delete this log?')) {
-      this.http.delete(`http://localhost:3000/api/delete-log/${logId}`)
-        .subscribe({
-          next: () => {
-            this.loadLoguri();
-          },
-          error: (error) => {
-            console.error('Error deleting log:', error);
-          }
-        });
+        this.http.delete(`http://localhost:3000/api/delete-log/${logId}`)
+            .subscribe({
+                next: (response: any) => {
+                    console.log('Log deleted successfully:', response);
+                    this.loadLoguri();
+                },
+                error: (error) => {
+                    console.error('Error deleting log:', error);
+                    alert(error.error?.error || 'Failed to delete log');
+                }
+            });
     }
   }
 }

@@ -8,7 +8,8 @@ const supabase = createClient(
     process.env.SUPABASE_KEY
 );
 
-router.get('/loguri-vizitatori', async (req, res) => {
+router.get('/', async (req, res) => {
+  console.log('GET /api/vizitatori accessed with query:', req.query); // Debug log
   try {
     const {
       sortBy = 'ora_intrare',
@@ -16,12 +17,12 @@ router.get('/loguri-vizitatori', async (req, res) => {
       filterDate
     } = req.query;
 
-    const allowedSortColumns = ['id_vizitator', 'cnp', 'ora_intrare', 'ora_iesire'];
+    const allowedSortColumns = ['id_vizitator', 'nume', 'ora_intrare', 'ora_iesire'];
     const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'ora_intrare';
 
     let query = supabase
       .from('vizitatori')
-      .select(`id_vizitator, cnp, ora_intrare, ora_iesire`);
+      .select(`id_vizitator, nume, ora_intrare, ora_iesire`);
 
     if (filterDate) {
       query = query
@@ -37,7 +38,7 @@ router.get('/loguri-vizitatori', async (req, res) => {
     // Transform directly into the shape your TS expects
     const transformedData = allLogs.map((log) => ({
       id_vizitator: log.id_vizitator,
-      cnp: log.cnp,
+      nume: log.nume,
       ora_intrare: log.ora_intrare,
       ora_iesire: log.ora_iesire,
     }));
@@ -49,7 +50,7 @@ router.get('/loguri-vizitatori', async (req, res) => {
   }
 });
 
-router.delete('/loguri-vizitatori/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const { error } = await supabase

@@ -7,7 +7,7 @@ const supabase = createClient(
     process.env.SUPABASE_KEY
 );
 
-router.get('/angajati', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const { 
             sortBy = 'id_utilizator', 

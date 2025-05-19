@@ -11,20 +11,19 @@ const supabase = createClient(
 
 // ─── GET /api/normal-profile/:id ────────────────────────────────────────────────
 // Fetch a user (utilizatori) together with their angajati row
-router.get('/normal-profile/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const { data, error } = await supabase
       .from('utilizatori')
       .select(`
         id_utilizator,
-        nume_utilizator,
+        email,
         rol,
         data_creare,
         angajati (
           prenume,
           nume,
-          cnp,
           poza,
           nr_legitimatie,
           id_divizie,
@@ -32,7 +31,6 @@ router.get('/normal-profile/:id', async (req, res) => {
           identificator_smartphone,
           nr_masina,
           acces_activ,
-          cnp_acordat_de,
           badge_acordat_de,
           data_acordarii,
           data_modificare
@@ -51,9 +49,9 @@ router.get('/normal-profile/:id', async (req, res) => {
   }
 });
 
-router.put('/normal-profile/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const { nume_utilizator, oldPassword, newPassword, rol, angajat } = req.body;
+  const { email, oldPassword, newPassword, rol, angajat } = req.body;
 
   try {
     // Handle password update if provided
@@ -77,16 +75,16 @@ router.put('/normal-profile/:id', async (req, res) => {
       const { error: updateError } = await supabase
         .from('utilizatori')
         .update({ 
-          nume_utilizator,
+          email,
           parola_hash 
         })
         .eq('id_utilizator', id);
 
       if (updateError) throw updateError;
     } else {
-      // Just update username
+      // Just update email
       const utilPayload = {
-        ...(nume_utilizator && { nume_utilizator }),
+        ...(email && { email }),
         ...(rol && { rol })
       };
       
@@ -106,7 +104,6 @@ router.put('/normal-profile/:id', async (req, res) => {
       const angPayload = {
         ...(angajat.prenume && { prenume: angajat.prenume }),
         ...(angajat.nume && { nume: angajat.nume }),
-        ...(angajat.cnp && { cnp: angajat.cnp }),
         ...(angajat.poza && { poza: angajat.poza }),
         ...(angajat.nr_legitimatie && { nr_legitimatie: angajat.nr_legitimatie }),
         ...(angajat.id_divizie && { id_divizie: angajat.id_divizie }),
@@ -114,7 +111,6 @@ router.put('/normal-profile/:id', async (req, res) => {
         ...(angajat.identificator_smartphone && { identificator_smartphone: angajat.identificator_smartphone }),
         ...(angajat.nr_masina && { nr_masina: angajat.nr_masina }),
         ...(typeof angajat.acces_activ === 'boolean' && { acces_activ: angajat.acces_activ }),
-        ...(angajat.cnp_acordat_de && { cnp_acordat_de: angajat.cnp_acordat_de }),
         ...(angajat.badge_acordat_de && { badge_acordat_de }),
         data_modificare: new Date().toISOString()
       };
@@ -137,13 +133,12 @@ router.put('/normal-profile/:id', async (req, res) => {
       .from('utilizatori')
       .select(`
         id_utilizator,
-        nume_utilizator,
+        email,
         rol,
         data_creare,
         angajati (
           prenume,
           nume,
-          cnp,
           poza,
           nr_legitimatie,
           id_divizie,
@@ -151,7 +146,6 @@ router.put('/normal-profile/:id', async (req, res) => {
           identificator_smartphone,
           nr_masina,
           acces_activ,
-          cnp_acordat_de,
           badge_acordat_de
         )
       `)

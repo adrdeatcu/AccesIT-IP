@@ -2,181 +2,93 @@ const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
-const authMiddleware = require('../middleware/auth.middleware');
+const { authenticate } = require('../middleware/auth.middleware');
 
+// Initialize Supabase client
 const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
 );
 
-router.get('/utilizatori', async (req, res) => {
-    try {
-        const { 
-            sortBy = 'id_utilizator', 
-            sortOrder = 'asc',
-            filterDate 
-        } = req.query;
-        
-        // Debug logs
-        console.log('Query params:', { sortBy, sortOrder, filterDate });
-        
-        const allowedSortColumns = ['id_utilizator', 'email', 'rol', 'data_creare'];
-        const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'id_utilizator';
-        
-        // Build query
-        let query = supabase
-            .from('utilizatori')
-            .select('*'); // Select all fields for now to debug
+// Change from '/utilizatori' to just '/' since the path prefix is set in index.js
+router.get('/', authenticate, async (req, res) => {
+  try {
+    const { sortBy = 'id_utilizator', sortOrder = 'asc', filterDate } = req.query;
 
-        // Add date filter if provided
-        if (filterDate) {
-            query = query.gte('data_creare', `${filterDate}T00:00:00`)
-                        .lte('data_creare', `${filterDate}T23:59:59`);
-        }
+    const allowedSortColumns = ['id_utilizator', 'email', 'rol', 'data_creare'];
+    const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'id_utilizator';
 
-        // Add sorting
-        query = query.order(validSortBy, { ascending: sortOrder === 'asc' });
+    let query = supabase.from('utilizatori').select('*');
 
-        // Execute query and log results
-        const { data, error } = await query;
-        
-        if (error) {
-            console.error('Supabase error:', error);
-            throw error;
-        }
-
-        console.log(`Found ${data?.length || 0} users`);
-        res.json(data || []);
-
-    } catch (error) {
-        console.error('Detailed error:', error);
-        res.status(500).json({ 
-            error: 'Error fetching users',
-            details: error.message
-        });
+    if (filterDate) {
+      query = query.gte('data_creare', `${filterDate}T00:00:00`)
+                  .lte('data_creare', `${filterDate}T23:59:59`);
     }
+
+    const { data, error } = await query.order(validSortBy, { ascending: sortOrder === 'asc' });
+    if (error) throw error;
+
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.delete('/utilizatori/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
+// Change from '/utilizatori/:id' to '/:id'
+router.delete('/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const tablesToClear = [
+      'interval_acces_angajati',
+      'loguri_prezenta',
+      'utilizatori_divizii',
+      'angajati'
+    ];
 
-        // 1. Delete from interval_acces_angajati table
-        const { error: intervalError } = await supabase
-            .from('interval_acces_angajati')
-            .delete()
-            .eq('id_utilizator', id);
-
-        if (intervalError) {
-            console.error('Error deleting from interval_acces_angajati:', intervalError);
-            return res.status(500).json({ 
-                error: 'Eroare la ștergerea intervalelor de acces'
-            });
-        }
-
-        // 2. Delete from loguri_prezenta table
-        const { error: loguriError } = await supabase
-            .from('loguri_prezenta')
-            .delete()
-            .eq('id_utilizator', id);
-
-        if (loguriError) {
-            console.error('Error deleting from loguri_prezenta:', loguriError);
-            return res.status(500).json({ 
-                error: 'Eroare la ștergerea logurilor de prezență'
-            });
-        }
-
-        // 3. Delete from utilizatori_divizii table
-        const { error: diviziiError } = await supabase
-            .from('utilizatori_divizii')
-            .delete()
-            .eq('id_utilizator', id);
-
-        if (diviziiError) {
-            console.error('Error deleting from utilizatori_divizii:', diviziiError);
-            return res.status(500).json({ 
-                error: 'Eroare la ștergerea asocierilor cu divizii'
-            });
-        }
-
-        // 4. Delete from angajati table
-        const { error: angajatiError } = await supabase
-            .from('angajati')
-            .delete()
-            .eq('id_utilizator', id);
-
-        if (angajatiError) {
-            console.error('Error deleting from angajati:', angajatiError);
-            return res.status(500).json({ 
-                error: 'Eroare la ștergerea angajatului'
-            });
-        }
-
-        // 5. Finally delete from utilizatori table
-        const { error: utilizatoriError } = await supabase
-            .from('utilizatori')
-            .delete()
-            .eq('id_utilizator', id);
-
-        if (utilizatoriError) {
-            console.error('Error deleting from utilizatori:', utilizatoriError);
-            return res.status(500).json({ 
-                error: 'Eroare la ștergerea utilizatorului'
-            });
-        }
-        
-        res.json({ message: 'Utilizator șters cu succes' });
-    } catch (error) {
-        console.error('Error in delete cascade:', error);
-        res.status(500).json({ 
-            error: 'Eroare la ștergerea utilizatorului și a datelor asociate'
-        });
+    for (const table of tablesToClear) {
+      const { error } = await supabase.from(table).delete().eq('id_utilizator', id);
+      if (error) throw error;
     }
+
+    const { error: utilError } = await supabase
+      .from('utilizatori')
+      .delete()
+      .eq('id_utilizator', id);
+    if (utilError) throw utilError;
+
+    res.json({ message: 'Utilizator șters cu succes' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.get('/utilizatori/me', authMiddleware, async (req, res) => {
-    try {
-        const userId = req.user.id_utilizator;
+// Change from '/utilizatori/me' to '/me'
+router.get('/me', authenticate, async (req, res) => {
+  try {
+    const authUserId = req.user.id;
 
-        const { data, error } = await supabase
-            .from('utilizatori')
-            .select(`
-                id_utilizator,
-                email,
-                rol,
-                created_at,
-                updated_at,
-                angajati (
-                    prenume,
-                    nume,
-                    cnp,
-                    poza,
-                    nr_legitimatie,
-                    id_divizie,
-                    cod_bluetooth,
-                    identificator_smartphone,
-                    nr_masina,
-                    acces_activ,
-                    cnp_acordat_de,
-                    badge_acordat_de,
-                    data_acordarii,
-                    data_modificare
-                )
-            `)
-            .eq('id_utilizator', userId)
-            .single();
+    // Find application user record
+    const { data: util, error: utilErr } = await supabase
+      .from('utilizatori')
+      .select('id_utilizator, email, rol, data_creare')
+      .eq('auth_id', authUserId)
+      .single();
+    if (utilErr || !util) throw utilErr || new Error('Utilizatorul nu a fost găsit');
 
-        if (error) throw error;
-        if (!data) {
-            return res.status(404).json({ error: 'User not found' });
-        }
+    // Fetch related angajati data
+    const { data: angajati, error: angErr } = await supabase
+      .from('angajati')
+      .select('*')
+      .eq('id_utilizator', util.id_utilizator);
+    if (angErr) throw angErr;
 
-        res.json(data);
-    } catch (err) {
-        console.error('Error in GET /utilizatori/me:', err);
-        res.status(500).json({ error: 'Eroare la încărcarea profilului' });
-    }
+    res.json({ ...util, angajati });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;

@@ -2,11 +2,11 @@ import { createRequire } from 'module';const require = createRequire(import.meta
 import {
   BrowserModule,
   DomRendererFactory2
-} from "./chunk-JFHSL6CT.js";
-import "./chunk-4JGXRVRH.js";
+} from "./chunk-JBKHJ22E.js";
+import "./chunk-D3CLZAJO.js";
 import {
   DOCUMENT
-} from "./chunk-MJGQD2AB.js";
+} from "./chunk-GKUHYSBD.js";
 import {
   ANIMATION_MODULE_TYPE,
   Inject,
@@ -21,7 +21,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-I45G7NBM.js";
+} from "./chunk-ONI6NHDX.js";
 import "./chunk-AQYIT73X.js";
 import {
   __objRest,
@@ -4104,7 +4104,7 @@ export {
 @angular/animations/fesm2022/browser.mjs:
 @angular/platform-browser/fesm2022/animations.mjs:
   (**
-   * @license Angular v19.2.10
+   * @license Angular v19.2.11
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)

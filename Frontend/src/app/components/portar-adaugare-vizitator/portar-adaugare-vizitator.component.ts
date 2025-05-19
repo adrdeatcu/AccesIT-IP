@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class PortarAdaugareVizitatorComponent {
   vizitatorData = {
-    cnp: '',
+    nume: '',
     ora_intrare: '',
     ora_iesire: ''
   };
@@ -20,17 +20,35 @@ export class PortarAdaugareVizitatorComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit(): void {
+    // Validate all fields are filled
+    if (!this.vizitatorData.nume || !this.vizitatorData.ora_intrare || !this.vizitatorData.ora_iesire) {
+        alert('Toate câmpurile sunt obligatorii');
+        return;
+    }
+
+    console.log('Sending data:', this.vizitatorData); // Debug log
+
     const url = 'http://localhost:3000/api/adaugare-vizitator';
 
     this.http.post(url, this.vizitatorData).subscribe({
-      next: () => {
-        this.successMessage = 'Vizitator adăugat cu succes!';
-        alert(this.successMessage); // ✅ mesaj de succes
-      },
-      error: (error) => {
-        console.error('Eroare la trimiterea formularului:', error);
-        alert('A apărut o eroare. Verifică datele introduse.');
-      }
+        next: (response: any) => {
+            console.log('Success response:', response);
+            this.successMessage = response.message || 'Vizitator adăugat cu succes!';
+            alert(this.successMessage);
+            this.resetForm();
+        },
+        error: (error) => {
+            console.error('Error submitting form:', error);
+            alert(error.error?.error || 'A apărut o eroare. Verifică datele introduse.');
+        }
     });
-  }
+}
+
+private resetForm(): void {
+    this.vizitatorData = {
+        nume: '',
+        ora_intrare: '',
+        ora_iesire: ''
+    };
+}
 }

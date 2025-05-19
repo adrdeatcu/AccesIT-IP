@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   loginData = {
     email: '',
-    parola: '',
+    password: '',
   };
 
   constructor(
@@ -21,7 +21,7 @@ export class LoginComponent {
   ) {}
 
   onSubmit() {
-    
+    console.log('→ Sending login payload:', this.loginData);
     this.http.post('http://localhost:3000/api/login', this.loginData)
       .subscribe({
         next: (response: any) => {

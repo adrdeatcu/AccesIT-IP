@@ -7,9 +7,10 @@ const supabase = createClient(
     process.env.SUPABASE_KEY
 );
 
-router.delete('/delete-user/:id_utilizator', async (req, res) => {
+// DELETE /api/delete-user/:id
+router.delete('/:id', async (req, res) => {
     try {
-      const { id_utilizator } = req.params;
+      const id_utilizator = req.params.id;  // correctly extract id param
   
       // 1. Delete from loguri_prezenta
       let { error } = await supabase
@@ -32,7 +33,7 @@ router.delete('/delete-user/:id_utilizator', async (req, res) => {
         .eq('id_utilizator', id_utilizator));
       if (error) throw error;
   
-      // 4. **Delete from utilizatori_divizii _before_ deleting utilizatori**
+      // 4. Delete from utilizatori_divizii
       ({ error } = await supabase
         .from('utilizatori_divizii')
         .delete()
@@ -51,6 +52,6 @@ router.delete('/delete-user/:id_utilizator', async (req, res) => {
       console.error('Error deleting user:', error);
       res.status(500).json({ error: 'Failed to delete user' });
     }
-  });
+});
 
 module.exports = router;

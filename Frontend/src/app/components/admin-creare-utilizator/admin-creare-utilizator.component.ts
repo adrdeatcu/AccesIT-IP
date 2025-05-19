@@ -26,7 +26,7 @@ interface AngajatData {
 export class AdminCreareUtilizatorComponent {
   userData = {
     email: '',
-    parola: '',
+    password: '', // Changed from parola to password
     rol: '',
     angajat: {
       id_utilizator: 0, // This will be set after user creation
@@ -70,7 +70,7 @@ export class AdminCreareUtilizatorComponent {
     // Check required fields
     const hasRequiredFields = 
         Boolean(this.userData.email) && 
-        Boolean(this.userData.parola) && 
+        Boolean(this.userData.password) && // Changed from parola to password
         Boolean(this.userData.rol) &&
         Boolean(this.userData.angajat.prenume) && 
         Boolean(this.userData.angajat.nume) &&

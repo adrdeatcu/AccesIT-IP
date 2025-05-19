@@ -6,14 +6,15 @@
         <div class="card-body">
             <form (ngSubmit)="onSubmit()" #editForm="ngForm">
                 <!-- Editable field -->
+
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="numeUtilizator" class="form-label">Nume Utilizator</label>
-                        <input type="text"
-                               id="numeUtilizator"
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email"
+                               id="email"
                                class="form-control"
-                               [(ngModel)]="model.nume_utilizator"
-                               name="numeUtilizator"
+                               [(ngModel)]="model.email"
+                               name="email"
                                required>
                     </div>
                 </div>
@@ -55,7 +56,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <h5 class="mb-3">Informații Utilizator</h5>
-                         <p><strong>Id_utilizator:</strong> {{ model.id_utilizator }}</p>
+                        <p><strong>Id_utilizator:</strong> {{ model.id_utilizator }}</p>
+                        <p><strong>Email:</strong> {{ model.email }}</p>
                         <p><strong>Rol:</strong> {{ model.rol }}</p>
                         <p><strong>Data creare cont:</strong> {{ model.data_creare | date:'medium' }}</p>
                     </div>
@@ -68,7 +70,6 @@
                     <div class="col-md-6">
                         <p><strong>Prenume:</strong> {{ model.angajati.prenume }}</p>
                         <p><strong>Nume:</strong> {{ model.angajati.nume }}</p>
-                        <p><strong>CNP:</strong> {{ model.angajati.cnp }}</p>
                         <p><strong>Nr. Legitimație:</strong> {{ model.angajati.nr_legitimatie }}</p>
                         <p><strong>Cod Bluetooth:</strong> {{ model.angajati.cod_bluetooth }}</p>
                     </div>
@@ -76,7 +77,6 @@
                         <p><strong>ID Smartphone:</strong> {{ model.angajati.identificator_smartphone }}</p>
                         <p><strong>Nr. Mașină:</strong> {{ model.angajati.nr_masina }}</p>
                         <p><strong>Acces Activ:</strong> {{ model.angajati.acces_activ ? 'Da' : 'Nu' }}</p>
-                        <p><strong>CNP Acordat De:</strong> {{ model.angajati.cnp_acordat_de }}</p>
                         <p><strong>Badge Acordat De:</strong> {{ model.angajati.badge_acordat_de }}</p>
                     </div>
                 </div>

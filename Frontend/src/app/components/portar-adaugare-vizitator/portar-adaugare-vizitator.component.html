@@ -14,13 +14,13 @@
   
             <form (ngSubmit)="onSubmit()" #vizitatorForm="ngForm">
               <div class="mb-3">
-                <label for="cnp" class="form-label">CNP</label>
+                <label for="nume" class="form-label">Nume</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="cnp"
-                  name="cnp"
-                  [(ngModel)]="vizitatorData.cnp"
+                  id="nume"
+                  name="nume"
+                  [(ngModel)]="vizitatorData.nume"
                   maxlength="13"
                   required
                 />

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 interface LogPrezenta {
   id_vizitator: number;
-  cnp: string;
+  nume: string;
   ora_intrare: string;
   ora_iesire: string | null;
 }
@@ -27,7 +27,8 @@ export class PortarVizitatoriComponent implements OnInit {
   }
 
   loadLogs(): void {
-    let url = `http://localhost:3000/api/loguri-vizitatori?sortBy=${this.currentSortColumn}&sortOrder=${this.sortDirection}`;
+    // Changed from loguri-vizitatori to vizitatori
+    let url = `http://localhost:3000/api/vizitatori?sortBy=${this.currentSortColumn}&sortOrder=${this.sortDirection}`;
 
     if (this.selectedDate) {
       url += `&filterDate=${this.selectedDate}`;
@@ -35,6 +36,7 @@ export class PortarVizitatoriComponent implements OnInit {
 
     this.http.get<LogPrezenta[]>(url).subscribe({
       next: (data) => {
+        console.log('Received visitor logs:', data); // Debug log
         this.logs = data;
       },
       error: (error) => {
@@ -75,17 +77,17 @@ export class PortarVizitatoriComponent implements OnInit {
   deleteLog(id: number): void {
     if (!confirm('Sigur vrei să ștergi această înregistrare?')) return;
 
-    this.http
-      .delete<{ message: string }>(`http://localhost:3000/api/loguri-vizitatori/${id}`)
-      .subscribe({
-        next: () => {
-          alert('Înregistrare ștearsă cu succes');
-          this.loadLogs();
-        },
-        error: (err) => {
-          console.error('Error deleting log:', err);
-          alert('Eroare la ștergerea înregistrării');
-        }
-      });
-  }
+    // Changed from loguri-vizitatori to vizitatori
+    this.http.delete<{ message: string }>(`http://localhost:3000/api/vizitatori/${id}`)
+        .subscribe({
+            next: () => {
+                alert('Înregistrare ștearsă cu succes');
+                this.loadLogs();
+            },
+            error: (err) => {
+                console.error('Error deleting log:', err);
+                alert('Eroare la ștergerea înregistrării');
+            }
+        });
+}
 }
