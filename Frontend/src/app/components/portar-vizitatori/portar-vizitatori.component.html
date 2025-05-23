@@ -1,5 +1,5 @@
 <div class="container mt-4">
-  <h2 class="mb-4">Gestionare Vizitatori</h2>
+  <h2 class="mb-4">Jurnal Vizitatori</h2>
 
   <!-- Date filter -->
   <div class="row mb-3">
@@ -19,6 +19,11 @@
         </button>
       </div>
     </div>
+    <div class="col-md-8 text-md-end">
+        <button class="btn btn-primary" routerLink="/portar/adaugare-vizitator">
+            <i class="bi bi-plus-circle"></i> Adaugă Înregistrare
+        </button>
+    </div>
   </div>
 
   <div class="table-responsive">
@@ -26,30 +31,26 @@
       <thead>
         <tr>
           <th (click)="toggleSort('id_vizitator')" style="cursor:pointer">
-            ID Vizitator <i class="bi" [ngClass]="getSortIcon('id_vizitator')"></i>
+            ID Log <i class="bi" [ngClass]="getSortIcon('id_vizitator')"></i>
           </th>
           <th (click)="toggleSort('nume')" style="cursor:pointer">
             Nume <i class="bi" [ngClass]="getSortIcon('nume')"></i>
           </th>
-          <th (click)="toggleSort('ora_intrare')" style="cursor:pointer">
-            Ora Intrare <i class="bi" [ngClass]="getSortIcon('ora_intrare')"></i>
+          <th (click)="toggleSort('tip_log')" style="cursor:pointer">
+            Tip <i class="bi" [ngClass]="getSortIcon('tip_log')"></i>
           </th>
-          <th (click)="toggleSort('ora_iesire')" style="cursor:pointer">
-            Ora Ieșire <i class="bi" [ngClass]="getSortIcon('ora_iesire')"></i>
+          <th (click)="toggleSort('data_log')" style="cursor:pointer">
+            Data și Ora <i class="bi" [ngClass]="getSortIcon('data_log')"></i>
           </th>
           <th>Acțiuni</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let log of logs">
+        <tr *ngFor="let log of logs"> 
           <td>{{ log.id_vizitator }}</td>
           <td>{{ log.nume }}</td>
-          <td>{{ log.ora_intrare | date:'short' }}</td>
-          <td>
-            {{ log.ora_iesire
-               ? (log.ora_iesire | date:'short')
-               : '—' }}
-          </td>
+          <td>{{ log.tip_log }}</td> <!-- Just show the value directly since it's already "IN" or "OUT" -->
+          <td>{{ log.data_log | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>
             <button class="btn btn-sm btn-danger" (click)="deleteLog(log.id_vizitator)">
               <i class="bi bi-trash"></i>
@@ -57,7 +58,7 @@
           </td>
         </tr>
         <tr *ngIf="logs.length === 0">
-          <td colspan="5" class="text-center">Nu există înregistrări.</td>
+          <td colspan="5" class="text-center">Nu există înregistrări pentru data selectată sau în total.</td>
         </tr>
       </tbody>
     </table>

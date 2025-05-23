@@ -1,69 +1,29 @@
 <div class="container mt-4">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="text-center">Adăugare Vizitator</h3>
-          </div>
-          <div class="card-body">
-  
-            <!-- ✅ Afișare mesaj de succes -->
-            <div *ngIf="successMessage" class="alert alert-success text-center">
-              {{ successMessage }}
-            </div>
-  
-            <form (ngSubmit)="onSubmit()" #vizitatorForm="ngForm">
-              <div class="mb-3">
-                <label for="nume" class="form-label">Nume</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="nume"
-                  name="nume"
-                  [(ngModel)]="vizitatorData.nume"
-                  maxlength="13"
-                  required
-                />
-              </div>
-  
-              <div class="mb-3">
-                <label for="ora_intrare" class="form-label">Ora Intrare</label>
-                <input
-                  type="datetime-local"
-                  class="form-control"
-                  id="ora_intrare"
-                  name="ora_intrare"
-                  [(ngModel)]="vizitatorData.ora_intrare"
-                  required
-                />
-              </div>
-  
-              <div class="mb-3">
-                <label for="ora_iesire" class="form-label">Ora Ieșire</label>
-                <input
-                  type="datetime-local"
-                  class="form-control"
-                  id="ora_iesire"
-                  name="ora_iesire"
-                  [(ngModel)]="vizitatorData.ora_iesire"
-                  required
-                />
-              </div>
-  
-              <div class="d-grid gap-2">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  [disabled]="!vizitatorForm.form.valid"
-                >
-                  <i class="bi bi-plus-circle"></i> Adaugă Vizitator
-                </button>
-              </div>
-            </form>
-  
-          </div>
-        </div>
-      </div>
+  <h2 class="mb-4">Adăugare Înregistrare Vizitator</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+  <form (ngSubmit)="onSubmit()" #visitorForm="ngForm">
+    <div class="mb-3">
+      <label for="nume" class="form-label">Nume Vizitator</label>
+      <input type="text" class="form-control" id="nume" name="nume" [(ngModel)]="visitorLog.nume" required>
     </div>
-  </div>
-  
+
+    <div class="mb-3">
+      <label for="tip_log" class="form-label">Tip Înregistrare</label>
+      <select class="form-select" id="tip_log" name="tip_log" [(ngModel)]="visitorLog.tip_log" required>
+        <option value="intrare">IN</option>
+        <option value="iesire">OUT</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="data_log" class="form-label">Data și Ora</label>
+      <input type="datetime-local" class="form-control" id="data_log" name="data_log" [(ngModel)]="visitorLog.data_log" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary me-2" [disabled]="!visitorForm.form.valid">Adaugă Înregistrare</button>
+    <button type="button" class="btn btn-secondary" routerLink="/portar/vizitatori">Anulează</button>
+  </form>
+</div>

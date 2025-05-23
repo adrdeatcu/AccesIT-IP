@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
-const util = require('util');
 
 // Initialize Supabase client with error checking
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error('Missing Supabase credentials');
+    console.error('FATAL ERROR: Missing Supabase credentials (SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY)');
+    process.exit(1); // Exit if credentials are not set
 }
 
 const supabase = createClient(
@@ -13,58 +13,69 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// Change from '/adaugare-vizitator' to just '/'
+// POST / (mounted at /api/adaugare-vizitator)
 router.post('/', async (req, res) => {
     try {
-        const { nume, ora_intrare, ora_iesire } = req.body;
+        const { nume, tip_log, data_log } = req.body;
         
-        console.log('Received data:', { nume, ora_intrare, ora_iesire }); // Debug log
+        console.log('Received data for new visitor log:', { nume, tip_log, data_log }); // Debug log
 
         // Validate required fields
-        if (!nume?.trim()) {
-            return res.status(400).json({ error: 'Numele este obligatoriu' });
+        if (!nume || typeof nume !== 'string' || !nume.trim()) {
+            return res.status(400).json({ error: 'Numele este obligatoriu și trebuie să fie un text valid.' });
+        }
+        
+        // Convert "intrare"/"iesire" to "IN"/"OUT" if they're sent from frontend
+        let displayTipLog = tip_log;
+        if (tip_log === 'intrare') displayTipLog = 'IN';
+        if (tip_log === 'iesire') displayTipLog = 'OUT';
+        
+        // Validate tip_log after conversion
+        if (!displayTipLog || (displayTipLog !== 'IN' && displayTipLog !== 'OUT')) {
+            return res.status(400).json({ 
+                error: 'Tipul logului este obligatoriu și trebuie să fie "IN" sau "OUT".' 
+            });
+        }
+        
+        if (!data_log) {
+            return res.status(400).json({ error: 'Data logului este obligatorie.' });
         }
 
-        // Parse and validate dates
-        const intrareDate = new Date(ora_intrare);
-        const iesireDate = new Date(ora_iesire);
-
-        if (isNaN(intrareDate.getTime()) || isNaN(iesireDate.getTime())) {
-            return res.status(400).json({ error: 'Format invalid pentru dată și oră' });
+        // Parse and validate date
+        const logDate = new Date(data_log);
+        if (isNaN(logDate.getTime())) {
+            return res.status(400).json({ error: 'Format invalid pentru data logului.' });
         }
 
-        if (iesireDate < intrareDate) {
-            return res.status(400).json({ error: 'Ora ieșirii nu poate fi mai mică decât ora intrării' });
-        }
-
-        // Proceed with insert
+        // Proceed with insert using the display value
         const { data, error: insertError } = await supabase
             .from('vizitatori')
             .insert([{
                 nume: nume.trim(),
-                ora_intrare: intrareDate.toISOString(),
-                ora_iesire: iesireDate.toISOString()
+                tip_log: displayTipLog, // Store "IN" or "OUT" in the database
+                data_log: logDate.toISOString()
             }])
             .select()
             .single();
 
         if (insertError) {
-            console.error('Insert error:', insertError);
+            console.error('Supabase insert error:', insertError);
             return res.status(400).json({
-                error: 'Eroare la inserare în baza de date',
-                details: insertError.message
+                error: 'Eroare la inserarea înregistrării în baza de date.',
+                details: insertError.message,
+                code: insertError.code
             });
         }
 
         return res.status(201).json({
-            message: 'Vizitator adăugat cu succes!',
+            message: 'Înregistrare vizitator adăugată cu succes!',
             data
         });
 
     } catch (err) {
-        console.error('Unexpected error:', err);
+        console.error('Unexpected server error in adaugare-vizitator:', err);
         return res.status(500).json({
-            error: 'Eroare internă a serverului',
+            error: 'Eroare internă a serverului.',
             details: err.message
         });
     }

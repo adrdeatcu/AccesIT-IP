@@ -2,63 +2,70 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+interface NewVisitorLog {
+  nume: string;
+  tip_log: 'intrare' | 'iesire';
+  data_log: string;
+}
+
 @Component({
   selector: 'app-portar-adaugare-vizitator',
-  templateUrl: './portar-adaugare-vizitator.component.html',
-  styleUrls: ['./portar-adaugare-vizitator.component.css'],
+  templateUrl: './portar-adaugare-vizitator.component.html', // Points to its own HTML for the form
+  // styleUrls: ['./portar-adaugare-vizitator.component.css']
   standalone: false
 })
 export class PortarAdaugareVizitatorComponent {
-  vizitatorData = {
+  visitorLog: NewVisitorLog = { // This property belongs here
     nume: '',
-    ora_intrare: '',
-    ora_iesire: ''
+    tip_log: 'intrare',
+    data_log: new Date().toISOString().substring(0, 16)
   };
-
-  successMessage = ''; // ✅ mesaj de succes
+  errorMessage: string = '';
+  successMessage: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit(): void {
-    // Validate all fields are filled
-    if (!this.vizitatorData.nume || !this.vizitatorData.ora_intrare || !this.vizitatorData.ora_iesire) {
-        alert('Toate câmpurile sunt obligatorii');
-        return;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    if (!this.visitorLog.nume || !this.visitorLog.tip_log || !this.visitorLog.data_log) {
+      this.errorMessage = 'Toate câmpurile sunt obligatorii.';
+      return;
     }
 
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('Nu sunteți autentificat.');
+      this.errorMessage = 'Nu sunteți autentificat.';
       return;
     }
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
 
-    console.log('Sending data:', this.vizitatorData); // Debug log
-
-    const url = 'http://localhost:3000/api/adaugare-vizitator';
-
-    this.http.post(url, this.vizitatorData, { headers: headers }).subscribe({
-        next: (response: any) => {
-            console.log('Success response:', response);
-            this.successMessage = response.message || 'Vizitator adăugat cu succes!';
-            alert(this.successMessage);
-            this.resetForm();
-        },
-        error: (error) => {
-            console.error('Error submitting form:', error);
-            alert(error.error?.error || 'A apărut o eroare. Verifică datele introduse.');
-        }
-    });
-}
-
-private resetForm(): void {
-    this.vizitatorData = {
-        nume: '',
-        ora_intrare: '',
-        ora_iesire: ''
+    const payload = {
+      ...this.visitorLog,
+      data_log: new Date(this.visitorLog.data_log).toISOString()
     };
-}
+
+    this.http.post('http://localhost:3000/api/adaugare-vizitator', payload, { headers })
+      .subscribe({
+        next: (response: any) => {
+          this.successMessage = response.message || 'Înregistrare adăugată cu succes!';
+          console.log('Visitor log added:', response.data);
+          this.visitorLog = {
+            nume: '',
+            tip_log: 'intrare',
+            data_log: new Date().toISOString().substring(0, 16)
+          };
+          // Optionally navigate: this.router.navigate(['/portar/vizitatori']);
+        },
+        error: (errorResponse) => {
+          console.error('Error adding visitor log:', errorResponse);
+          this.errorMessage = errorResponse.error?.error || errorResponse.error?.details || 'Eroare la adăugarea înregistrării.';
+        }
+      });
+  }
 }

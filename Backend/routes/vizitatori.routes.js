@@ -6,11 +6,11 @@ const { authenticate } = require('../middleware/auth.middleware');
 // Initialize Supabase client
 const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY  // Use service role key instead of anonymous key
+    process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 router.get('/', authenticate, async (req, res) => {
-  console.log('GET /api/vizitatori accessed with query:', req.query); // Debug log
+  console.log('GET /api/vizitatori accessed with query:', req.query);
   try {
     // Log the auth context
     console.log('Auth context:', req.user);
@@ -30,45 +30,41 @@ router.get('/', authenticate, async (req, res) => {
     console.log('User role:', user.rol);
 
     const {
-      sortBy = 'ora_intrare',
+      sortBy = 'data_log',  // Default to data_log instead of ora_intrare
       sortOrder = 'desc',
       filterDate
     } = req.query;
 
-    const allowedSortColumns = ['id_vizitator', 'nume', 'ora_intrare', 'ora_iesire'];
-    const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'ora_intrare';
+    // Update column names to match the new schema
+    const allowedSortColumns = ['id_vizitator', 'nume', 'tip_log', 'data_log'];
+    const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'data_log';
 
     let query = supabase
       .from('vizitatori')
-      .select(`id_vizitator, nume, ora_intrare, ora_iesire`);
+      .select('id_vizitator, nume, tip_log, data_log'); // Updated column names
 
     if (filterDate) {
+      // Updated date filtering for the new schema
+      // This assumes data_log is a timestamp column
       query = query
-        .gte('ora_iesire', `${filterDate}T00:00:00`)
-        .lte('ora_intrare', `${filterDate}T23:59:59`);
+        .gte('data_log', `${filterDate}T00:00:00`)
+        .lt('data_log', `${filterDate}T23:59:59.999`);
     }
 
     query = query.order(validSortBy, { ascending: sortOrder === 'asc' });
 
-    const { data: allLogs, error: logsError } = await query;
+    const { data: logs, error: logsError } = await query;
     if (logsError) throw logsError;
 
-    // Transform directly into the shape your TS expects
-    const transformedData = allLogs.map((log) => ({
-      id_vizitator: log.id_vizitator,
-      nume: log.nume,
-      ora_intrare: log.ora_intrare,
-      ora_iesire: log.ora_iesire,
-    }));
-
-    res.json(transformedData);
+    // No need for complex transformation since the schema matches the frontend expectation
+    res.json(logs);
   } catch (error) {
     console.error('Error fetching logs:', error);
     res.status(500).json({ error: 'Eroare la încărcarea logurilor', details: error.message });
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   const { id } = req.params;
   try {
     const { error } = await supabase

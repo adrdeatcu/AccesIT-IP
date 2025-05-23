@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router'; // To navigate after success
 
-interface LogPrezenta {
+interface VizitatorLog { // This is the interface for displaying logs
   id_vizitator: number;
   nume: string;
-  ora_intrare: string;
-  ora_iesire: string | null;
+  tip_log: 'IN' | 'OUT';  // Changed from 'intrare' | 'iesire' to match DB values
+  data_log: string;
 }
 
 @Component({
   selector: 'app-portar-vizitatori',
-  templateUrl: './portar-vizitatori.component.html',
+  templateUrl: './portar-vizitatori.component.html', // This should point to the HTML that LISTS visitors
   styleUrls: ['./portar-vizitatori.component.css'],
   standalone: false
 })
 export class PortarVizitatoriComponent implements OnInit {
-  logs: LogPrezenta[] = [];
-  currentSortColumn: string = 'ora_intrare';
+  logs: VizitatorLog[] = []; // Use the correct interface for displaying
+  currentSortColumn: keyof VizitatorLog = 'data_log'; // Use keyof for type safety
   sortDirection: 'asc' | 'desc' = 'desc';
   selectedDate: string = '';
 
@@ -43,9 +44,9 @@ export class PortarVizitatoriComponent implements OnInit {
       url += `&filterDate=${this.selectedDate}`;
     }
 
-    this.http.get<LogPrezenta[]>(url, { headers }).subscribe({
+    this.http.get<VizitatorLog[]>(url, { headers }).subscribe({ // Expect VizitatorLog array
       next: (data) => {
-        console.log('Received visitor logs:', data); // Debug log
+        console.log('Received visitor logs:', data);
         this.logs = data;
       },
       error: (error) => {
@@ -55,7 +56,7 @@ export class PortarVizitatoriComponent implements OnInit {
     });
   }
 
-  toggleSort(column: string): void {
+  toggleSort(column: keyof VizitatorLog): void { // Use keyof
     if (this.currentSortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
@@ -65,7 +66,7 @@ export class PortarVizitatoriComponent implements OnInit {
     this.loadLogs();
   }
 
-  getSortIcon(column: string): string {
+  getSortIcon(column: keyof VizitatorLog): string { // Use keyof
     if (this.currentSortColumn !== column) {
       return 'bi-sort';
     }
@@ -82,7 +83,7 @@ export class PortarVizitatoriComponent implements OnInit {
     this.loadLogs();
   }
 
-  deleteLog(id: number): void {
+  deleteLog(id_vizitator: number): void { // Parameter is id_vizitator
     if (!confirm('Sigur vrei să ștergi această înregistrare?')) return;
 
     const token = localStorage.getItem('token');
@@ -95,7 +96,7 @@ export class PortarVizitatoriComponent implements OnInit {
       'Authorization': `Bearer ${token}`
     });
 
-    this.http.delete<{ message: string }>(`http://localhost:3000/api/vizitatori/${id}`, { headers })
+    this.http.delete<{ message: string }>(`http://localhost:3000/api/vizitatori/${id_vizitator}`, { headers })
         .subscribe({
             next: () => {
                 alert('Înregistrare ștearsă cu succes');
@@ -106,5 +107,9 @@ export class PortarVizitatoriComponent implements OnInit {
                 alert('Eroare la ștergerea înregistrării');
             }
         });
+  }
 }
-}
+
+// The PortarAdaugareVizitatorComponent should be separate
+// @Component({ ... })
+// export class PortarAdaugareVizitatorComponent { ... }
