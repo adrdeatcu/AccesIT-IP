@@ -4,14 +4,10 @@ const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY  // Use service role key instead of anonymous key
 );
 
-router.get('/loguri-manuale', async (req, res) => {
-
-});
-
-router.post('/loguri-manuale', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const { id_utilizator, tip_log } = req.body;
         
@@ -24,11 +20,14 @@ router.post('/loguri-manuale', async (req, res) => {
             return res.status(400).json({ error: 'Tipul de log trebuie să fie IN sau OUT' });
         }
 
+        // Parse id_utilizator as an integer
+        const userId = parseInt(id_utilizator, 10);
+
         // Check if user exists
         const { data: existingUser, error: userError } = await supabase
             .from('utilizatori')
             .select('id_utilizator')
-            .eq('id_utilizator', id_utilizator)
+            .eq('id_utilizator', userId)
             .single();
 
         if (userError || !existingUser) {
@@ -39,7 +38,7 @@ router.post('/loguri-manuale', async (req, res) => {
             .from('loguri_prezenta')
             .insert([
                 {
-                    id_utilizator,
+                    id_utilizator: userId,
                     tip_log,
                     data_log: new Date().toISOString()
                 }

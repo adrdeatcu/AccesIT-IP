@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
@@ -91,16 +91,27 @@ export class AdminCreareUtilizatorComponent {
       return;
     }
 
-    this.http.post('http://localhost:3000/api/register', this.userData)
-      .subscribe({
-        next: (response) => {
-          alert('Utilizator creat cu succes!');
-          this.router.navigate(['/admin/utilizatori']);
-        },
-        error: (error) => {
-          console.error('Error creating user:', error);
-          alert(error.error.error || 'Eroare la crearea utilizatorului');
-        }
-      });
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Nu sunteți autentificat.');
+        this.router.navigate(['/login']); // Redirect to login page
+        return;
+    }
+
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+    });
+
+    this.http.post('http://localhost:3000/api/register', this.userData, { headers: headers })
+        .subscribe({
+            next: (response) => {
+                alert('Utilizator creat cu succes!');
+                this.router.navigate(['/admin/utilizatori']);
+            },
+            error: (error) => {
+                console.error('Error creating user:', error);
+                alert(error.error.error || 'Eroare la crearea utilizatorului');
+            }
+        });
   }
 }

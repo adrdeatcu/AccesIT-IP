@@ -1,16 +1,34 @@
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
+const { authenticate } = require('../middleware/auth.middleware');
 
 // Initialize Supabase client
 const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY  // Use service role key instead of anonymous key
 );
 
-router.get('/', async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   console.log('GET /api/vizitatori accessed with query:', req.query); // Debug log
   try {
+    // Log the auth context
+    console.log('Auth context:', req.user);
+
+    // Test database connection and user role
+    const { data: user, error: userError } = await supabase
+        .from('utilizatori')
+        .select('rol')
+        .eq('auth_id', req.user.id)
+        .single();
+
+    if (userError) {
+        console.error('Error fetching user role:', userError);
+        return res.status(500).json({ error: 'Error fetching user role' });
+    }
+
+    console.log('User role:', user.rol);
+
     const {
       sortBy = 'ora_intrare',
       sortOrder = 'desc',

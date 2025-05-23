@@ -1,25 +1,34 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-async function authenticate(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Token lipsă.' });
-  }
+const authenticate = async (req, res, next) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ error: 'No token provided' });
+        }
 
-  const token = authHeader.split(' ')[1];
-  const { data, error } = await supabase.auth.getUser(token);
+        // Verify the token and get user data
+        const { data: { user }, error } = await supabase.auth.getUser(token);
 
-  if (error || !data.user) {
-    return res.status(401).json({ error: 'Token invalid.' });
-  }
+        if (error) {
+            console.error('Auth error:', error);
+            return res.status(401).json({ error: 'Invalid token' });
+        }
 
-  req.user = data.user;
-  next();
-}
+        // Add user data to request
+        req.user = user;
+        console.log('Authenticated user:', user); // Debug log
+
+        next();
+    } catch (error) {
+        console.error('Authentication error:', error);
+        res.status(401).json({ error: 'Authentication failed' });
+    }
+};
 
 module.exports = { authenticate };

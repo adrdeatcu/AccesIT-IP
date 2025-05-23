@@ -4,13 +4,13 @@ const { createClient } = require('@supabase/supabase-js');
 const util = require('util');
 
 // Initialize Supabase client with error checking
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error('Missing Supabase credentials');
 }
 
 const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 // Change from '/adaugare-vizitator' to just '/'
@@ -35,13 +35,6 @@ router.post('/', async (req, res) => {
 
         if (iesireDate < intrareDate) {
             return res.status(400).json({ error: 'Ora ieșirii nu poate fi mai mică decât ora intrării' });
-        }
-
-        // Test database connection before insert
-        const { error: testError } = await supabase.from('vizitatori').select('count');
-        if (testError) {
-            console.error('Database connection test failed:', testError);
-            return res.status(503).json({ error: 'Eroare de conexiune la baza de date' });
         }
 
         // Proceed with insert

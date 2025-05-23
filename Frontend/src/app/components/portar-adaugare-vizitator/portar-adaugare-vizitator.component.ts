@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
@@ -26,11 +26,21 @@ export class PortarAdaugareVizitatorComponent {
         return;
     }
 
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Nu sunteți autentificat.');
+      return;
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
     console.log('Sending data:', this.vizitatorData); // Debug log
 
     const url = 'http://localhost:3000/api/adaugare-vizitator';
 
-    this.http.post(url, this.vizitatorData).subscribe({
+    this.http.post(url, this.vizitatorData, { headers: headers }).subscribe({
         next: (response: any) => {
             console.log('Success response:', response);
             this.successMessage = response.message || 'Vizitator adăugat cu succes!';

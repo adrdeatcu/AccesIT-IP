@@ -13,41 +13,43 @@ router.post('/', async (req, res) => {
   try {
     const { email, password, phone, display_name, rol, angajat } = req.body;
 
+    console.log('Received registration data:', req.body); // Log the entire request body
+
     if (!email || !password || !rol) {
       return res.status(400).json({ error: 'Email, password și rol sunt obligatorii.' });
     }
 
     // Create Supabase Auth user
-  const { data, error: authError } = await supabase.auth.admin.createUser({
-  email,
-  password,
-  phone,
-  user_metadata: { display_name },
-  email_confirm: true,
-  app_metadata: { providers: ['email'] }
-});
-if (authError) throw authError;
+    const { data, error: authError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      phone,
+      user_metadata: { display_name },
+      email_confirm: true,
+      app_metadata: { providers: ['email'] }
+    });
+    if (authError) throw authError;
 
-const authUser = data.user; // <- extragi user-ul
+    const authUser = data.user; // <- extragi user-ul
 
-// Verificare pentru debugging
-if (!authUser || !authUser.email) {
-  console.error('authUser missing email:', authUser);
-  return res.status(500).json({ error: 'Eroare la extragerea emailului utilizatorului.' });
-}
+    // Verificare pentru debugging
+    if (!authUser || !authUser.email) {
+      console.error('authUser missing email:', authUser);
+      return res.status(500).json({ error: 'Eroare la extragerea emailului utilizatorului.' });
+    }
 
-// Inserare în tabela utilizatori
-const { data: utilRows, error: utilError } = await supabase
-  .from('utilizatori')
-  .insert({
-    auth_id: authUser.id,
-    email: email,
-    rol,
-    data_creare: new Date().toISOString()
-  })
-  .select('id_utilizator')
-  .single();
-if (utilError) throw utilError;
+    // Inserare în tabela utilizatori
+    const { data: utilRows, error: utilError } = await supabase
+      .from('utilizatori')
+      .insert({
+        auth_id: authUser.id,
+        email: email,
+        rol,
+        data_creare: new Date().toISOString()
+      })
+      .select('id_utilizator')
+      .single();
+    if (utilError) throw utilError;
 
     // Optionally insert into angajati table
     if (angajat) {

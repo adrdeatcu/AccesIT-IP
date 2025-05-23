@@ -5,19 +5,42 @@
         </div>
         <div class="card-body">
             <form (ngSubmit)="onSubmit()" #editForm="ngForm">
-                <!-- Editable field -->
-
+                <!-- Email display (read-only here, changed via separate section) -->
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email"
-                               id="email"
+                        <label class="form-label">Email Curent</label>
+                        <input type="text"
                                class="form-control"
-                               [(ngModel)]="model.email"
-                               name="email"
-                               required>
+                               [value]="model.email"
+                               readonly>
                     </div>
                 </div>
+
+                <!-- Email change section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="mb-3">Schimbare Email</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="newEmail" class="form-label">Email Nou</label>
+                            <input type="email"
+                                   id="newEmail"
+                                   class="form-control"
+                                   [(ngModel)]="emailChangeData.newEmail"
+                                   name="newEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="currentPasswordForEmail" class="form-label">Parola Curentă (pentru schimbare email)</label>
+                            <input type="password"
+                                   id="currentPasswordForEmail"
+                                   class="form-control"
+                                   [(ngModel)]="emailChangeData.currentPassword"
+                                   name="currentPasswordForEmail">
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- Password change section -->
                 <div class="row mb-4">
@@ -57,7 +80,7 @@
                     <div class="col-md-6">
                         <h5 class="mb-3">Informații Utilizator</h5>
                         <p><strong>Id_utilizator:</strong> {{ model.id_utilizator }}</p>
-                        <p><strong>Email:</strong> {{ model.email }}</p>
+                        <!-- <p><strong>Email:</strong> {{ model.email }}</p> -->
                         <p><strong>Rol:</strong> {{ model.rol }}</p>
                         <p><strong>Data creare cont:</strong> {{ model.data_creare | date:'medium' }}</p>
                     </div>
@@ -84,8 +107,8 @@
                 <div class="d-flex gap-2 mt-4">
                     <button type="submit"
                             class="btn btn-primary"
-                            [disabled]="(passwordData.newPassword && passwordData.newPassword !== passwordData.confirmPassword)">
-                        Salvează
+                            [disabled]="(passwordData.newPassword && passwordData.newPassword !== passwordData.confirmPassword) || (emailChangeData.newEmail && !emailChangeData.currentPassword)">
+                        Salvează Modificările
                     </button>
                     <button type="button"
                             class="btn btn-secondary"

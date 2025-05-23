@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 interface LogPrezenta {
   id_vizitator: number;
@@ -27,14 +27,23 @@ export class PortarVizitatoriComponent implements OnInit {
   }
 
   loadLogs(): void {
-    // Changed from loguri-vizitatori to vizitatori
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Nu sunteți autentificat.');
+      return;
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
     let url = `http://localhost:3000/api/vizitatori?sortBy=${this.currentSortColumn}&sortOrder=${this.sortDirection}`;
 
     if (this.selectedDate) {
       url += `&filterDate=${this.selectedDate}`;
     }
 
-    this.http.get<LogPrezenta[]>(url).subscribe({
+    this.http.get<LogPrezenta[]>(url, { headers }).subscribe({
       next: (data) => {
         console.log('Received visitor logs:', data); // Debug log
         this.logs = data;
@@ -73,12 +82,20 @@ export class PortarVizitatoriComponent implements OnInit {
     this.loadLogs();
   }
 
-  
   deleteLog(id: number): void {
     if (!confirm('Sigur vrei să ștergi această înregistrare?')) return;
 
-    // Changed from loguri-vizitatori to vizitatori
-    this.http.delete<{ message: string }>(`http://localhost:3000/api/vizitatori/${id}`)
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Nu sunteți autentificat.');
+      return;
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    this.http.delete<{ message: string }>(`http://localhost:3000/api/vizitatori/${id}`, { headers })
         .subscribe({
             next: () => {
                 alert('Înregistrare ștearsă cu succes');

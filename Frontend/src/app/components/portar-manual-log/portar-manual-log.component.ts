@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 interface ManualLog {
   id_utilizator: number;
@@ -30,7 +30,19 @@ export class PortarManualLogComponent {
       return;
     }
 
-    this.http.post('http://localhost:3000/api/loguri-manuale', this.logData)
+    console.log('Sending log data:', this.logData); // Add this line
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Nu sunteți autentificat.');
+      return;
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    this.http.post('http://localhost:3000/api/log-manual', this.logData, { headers: headers })
       .subscribe({
         next: (response) => {
           alert('Log creat cu succes!');

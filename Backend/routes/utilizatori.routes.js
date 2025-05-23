@@ -7,7 +7,7 @@ const { authenticate } = require('../middleware/auth.middleware');
 // Initialize Supabase client
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY  // Use service role key instead of anonymous key
 );
 
 // Change from '/utilizatori' to just '/' since the path prefix is set in index.js
@@ -15,10 +15,15 @@ router.get('/', authenticate, async (req, res) => {
   try {
     const { sortBy = 'id_utilizator', sortOrder = 'asc', filterDate } = req.query;
 
+    // Log the auth context
+    console.log('Auth context:', req.user);
+
     const allowedSortColumns = ['id_utilizator', 'email', 'rol', 'data_creare'];
     const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'id_utilizator';
 
-    let query = supabase.from('utilizatori').select('*');
+    let query = supabase
+      .from('utilizatori')
+      .select('*, angajati(*)');  // Include angajati in the query
 
     if (filterDate) {
       query = query.gte('data_creare', `${filterDate}T00:00:00`)
@@ -26,8 +31,13 @@ router.get('/', authenticate, async (req, res) => {
     }
 
     const { data, error } = await query.order(validSortBy, { ascending: sortOrder === 'asc' });
-    if (error) throw error;
+    
+    if (error) {
+      console.error('Supabase error:', error);
+      throw error;
+    }
 
+    console.log('Query result:', data); // Debug log
     res.json(data);
   } catch (error) {
     console.error('Error fetching users:', error);

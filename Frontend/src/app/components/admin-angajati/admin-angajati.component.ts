@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 
 interface Angajat {
@@ -37,19 +37,30 @@ export class AdminAngajatiComponent implements OnInit {
 
   ngOnInit() {
     this.loadAngajati();
+    const token = localStorage.getItem('token');
+if (token) {
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  console.log('Decoded JWT:', payload);
+}
   }
 
   private loadAngajati() {
     let url = `http://localhost:3000/api/angajati?sortBy=${this.currentSortColumn}&sortOrder=${this.sortDirection}`;
-    
+  
     if (this.selectedDate) {
       url += `&filterDate=${this.selectedDate}`;
     }
 
-    this.http.get<Angajat[]>(url)
+    const token = localStorage.getItem('token') || '';
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    this.http.get<Angajat[]>(url, { headers })
       .subscribe({
         next: (data) => {
-          this.angajati = data;
+          console.log('Received data:', data);
+          this.angajati = data; // ✅ correct spelling here
         },
         error: (error) => {
           console.error('Error loading employees:', error);

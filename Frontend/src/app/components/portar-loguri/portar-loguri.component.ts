@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -114,7 +114,18 @@ export class PortarLoguriComponent implements OnInit {
     }
 
     if (confirm('Are you sure you want to delete this log?')) {
-        this.http.delete(`http://localhost:3000/api/delete-log/${logId}`)
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Nu sunteți autentificat.');
+            
+            return;
+        }
+
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+
+        this.http.delete(`http://localhost:3000/api/delete-log/${logId}`, { headers: headers })
             .subscribe({
                 next: (response: any) => {
                     console.log('Log deleted successfully:', response);
